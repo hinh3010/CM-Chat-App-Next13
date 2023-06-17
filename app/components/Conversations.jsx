@@ -3,30 +3,17 @@ import { Switch } from "@headlessui/react";
 import Avatar from "./ui/Avatar";
 import { useState } from "react";
 import Logo from "./ui/Logo";
-import Messenger from "./ui/Messenger";
+import InputSearch from "./ui/InputSearch";
 
-const Navbar = () => {
+const Conversations = () => {
     const [enabled, setEnabled] = useState(true)
     return (
-        <div className="w-full h-full flex flex-col items-center justify-between pt-10 pb-20" >
+        <div className="w-full h-full flex flex-col pt-10 pb-20 px-8">
+            {/* contact search */}
             <section className="flex flex-col items-center">
-                <section className="mb-10">
-                    <Logo />
-                </section>
-                <section className="mb-10">
-                    <Messenger />
-                </section>
-                <section className="mb-10">
-                    <Messenger />
-                </section>
-                <section className="mb-10">
-                    <Messenger />
-                </section>
-                <hr style={{ border: '1px solid #333', width: '100%', height: '1px' }} />
-                <section className="mt-10">
-                    <Messenger />
-                </section>
-            </section>
+                <InputSearch />
+            </section >
+            <hr style={{ border: '1px solid #333', width: '100%', height: '1px', margin: '10px 0' }} />
             <section className="flex flex-col items-center">
                 <section className="flex items-center mt-10">
                     <Switch
@@ -48,8 +35,8 @@ const Navbar = () => {
                     <Avatar src={"https://source.unsplash.com/256x256"} />
                 </section>
             </section>
-        </div>
+        </div >
     );
 }
 
-export default Navbar;
+export default Conversations;
