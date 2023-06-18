@@ -47,7 +47,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className='h-full scroll-smooth antialiased'>
       <body className={inter.className + ' ' + 'h-full'}>
-        <div className='h-full w-full grid grid-cols-3'>
+        <div className='w-full grid grid-cols-3 overflow-hidden' style={{ height: '100vh' }}>
           <section className='w-full h-full col-span-1'>
             <Sidebar />
           </section>

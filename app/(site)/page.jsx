@@ -1,12 +1,18 @@
-import Image from 'next/image'
+import ChatView from "../components/ChatView";
+import Header from "../components/Header";
+import InputChat from "../components/InputChat";
 
 export default function Home() {
     return (
-        <main className="">
+        <main className="h-full w-full overflow-hidden">
             <section>
-                <div className='container py-4'>
-                    <h1 className='text-2xl font-semibold tracking-tight'>Home page</h1>
-                </div>
+                <Header />
+            </section>
+            <section>
+                <ChatView />
+            </section>
+            <section>
+                <InputChat />
             </section>
         </main>
     )
