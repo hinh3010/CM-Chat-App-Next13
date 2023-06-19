@@ -4,11 +4,11 @@ import InputChat from "../components/InputChat";
 
 export default function Home() {
     return (
-        <main className="h-full w-full overflow-hidden">
-            <section>
+        <main className="h-full w-full overflow-hidden shadow-lg flex flex-col">
+            <section >
                 <Header />
             </section>
-            <section>
+            <section className="flex-1 border-2">
                 <ChatView />
             </section>
             <section>

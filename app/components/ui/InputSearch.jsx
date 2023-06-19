@@ -3,14 +3,14 @@
 function InputSearch() {
 
     return (
-        <form class="flex items-center">
-            <label for="voice-search" class="sr-only">
+        <form className="flex items-center">
+            <label for="voice-search" className="sr-only">
                 Search
             </label>
-            <div class="relative w-full">
-                <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+            <div className="relative w-full">
+                <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
                     <svg
-                        class="w-8 h-8 text-gray-500 dark:text-gray-400"
+                        className="w-8 h-8 text-gray-500 dark:text-gray-400"
                         fill="currentColor"
                         viewBox="0 0 20 20"
                         xmlns="http://www.w3.org/2000/svg"
@@ -25,16 +25,16 @@ function InputSearch() {
                 <input
                     type="text"
                     id="voice-search"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-3xl rounded-2xl focus:ring-blue-500 focus:border-blue-500 block w-full pl-12 pr-10 py-3  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-3xl rounded-2xl focus:ring-blue-500 focus:border-blue-500 block w-full pl-12 pr-10 py-3  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="Search here..."
                     required
                 />
                 <button
                     type="button"
-                    class="flex absolute inset-y-0 right-0 items-center pr-3"
+                    className="flex absolute inset-y-0 right-0 items-center pr-3"
                 >
                     <svg
-                        class="w-6 h-6 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                        className="w-6 h-6 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
                         fill="currentColor"
                         viewBox="0 0 20 20"
                         xmlns="http://www.w3.org/2000/svg"

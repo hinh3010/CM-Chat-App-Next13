@@ -3,11 +3,11 @@ import Image from "next/image";
 import { useState } from "react";
 
 
-function Avatar({ src, ...rest }) {
+function Avatar({ src, className, ...rest }) {
     const [loading, setLoading] = useState(true);
 
     return (
-        <div className="avatar cursor-pointer" {...rest}>
+        <div className={"avatar cursor-pointer " + className}{...rest}>
             <div className="relative rounded-full w-full h-full overflow-hidden shadow">
                 <Image
                     src={src}

@@ -8,7 +8,7 @@ const Sidebar = () => {
             <section className="col-span-1">
                 <Navbar />
             </section>
-            <section className="col-span-3 shadow-lg">
+            <section className="col-span-3 shadow-2xl">
                 <Conversations />
             </section>
         </div>
