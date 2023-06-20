@@ -3,10 +3,10 @@ import Image from "next/image";
 import { useState } from "react";
 import { images } from "~/public/images";
 
-function Logo({ src, ...rest }) {
+function Logo({ className, ...rest }) {
     const [loading, setLoading] = useState(true);
     return (
-        <div style={{ borderRadius: '12px' }} className="relative cursor-pointer w-24 h-24 overflow-hidden shadow" {...rest}>
+        <div style={{ borderRadius: '12px' }} className={"relative cursor-pointer w-24 h-24 overflow-hidden " + className} {...rest}>
             <Image
                 src={images.logo}
                 alt="Avatar"
