@@ -1,10 +1,11 @@
 "use client";
 
-function InputSearch() {
+import "./inputSearch.scss";
 
+function InputSearch() {
     return (
         <form className="flex items-center">
-            <label for="voice-search" className="sr-only">
+            <label htmlFor="voice-search" className="sr-only">
                 Search
             </label>
             <div className="relative w-full">
@@ -16,17 +17,24 @@ function InputSearch() {
                         xmlns="http://www.w3.org/2000/svg"
                     >
                         <path
-                            fill-rule="evenodd"
+                            fillRule="evenodd"
                             d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                            clip-rule="evenodd"
+                            clipRule="evenodd"
                         ></path>
                     </svg>
                 </div>
                 <input
                     type="text"
                     id="voice-search"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-3xl rounded-2xl focus:ring-blue-500 focus:border-blue-500 block w-full pl-12 pr-10 py-3  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="
+                        border border-blue-500  text-3xl 
+                        rounded-2xl w-full pl-12 pr-10 py-3
+                    "
                     placeholder="Search here..."
+                    style={{
+                        backgroundColor: '#EAF2FE',
+                        color: '#709CE6',
+                    }}
                     required
                 />
                 <button
@@ -40,9 +48,9 @@ function InputSearch() {
                         xmlns="http://www.w3.org/2000/svg"
                     >
                         <path
-                            fill-rule="evenodd"
+                            fillRule="evenodd"
                             d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z"
-                            clip-rule="evenodd"
+                            clipRule="evenodd"
                         ></path>
                     </svg>
                 </button>

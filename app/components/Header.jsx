@@ -3,7 +3,7 @@ import Avatar from "./ui/Avatar";
 
 const Header = () => {
     return (
-        <div className="h-36 w-full flex items-center justify-between px-10 py-8 shadow-2xl">
+        <div className="h-28 w-full flex items-center justify-between px-10 shadow-2xl">
             <section className="flex items-center">
                 <Avatar src={"https://source.unsplash.com/256x256"} />
                 <div

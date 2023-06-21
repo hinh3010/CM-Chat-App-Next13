@@ -1,11 +1,11 @@
-import ChatView from "../components/ChatView";
-import Header from "../components/Header";
-import InputChat from "../components/InputChat";
+import ChatView from "@/components/ChatView";
+import Header from "@/components/Header";
+import InputChat from "@/components/InputChat";
 
 export default function Home() {
     return (
         <main className="h-full w-full shadow-lg flex flex-col">
-            <section className="">
+            <section >
                 <Header />
             </section>
             <section className="border-2" style={{ overflow: 'overlay' }} >

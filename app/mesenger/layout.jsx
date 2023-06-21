@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
+import Sidebar from "@/components/Sidebar";
 import styles from "./styles.scss";
-import Sidebar from "../components/Sidebar";
+import Sidebar2 from "../components/Sidebar2";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -55,18 +56,12 @@ export default function RootLayout({ children }) {
                 }}
             >
                 <div
-                    className="h-full w-full grid grid-cols-3"
+                    className="h-full w-full flex"
                 >
-                    <section
-                        className="w-full col-span-1"
-                        style={{ height: "100vh" }}
-                    >
-                        <Sidebar />
+                    <section>
+                        <Sidebar2 />
                     </section>
-                    <section
-                        className="w-full col-span-2"
-                        style={{ height: "100vh" }}
-                    >
+                    <section className="flex-1">
                         {children}
                     </section>
                 </div>

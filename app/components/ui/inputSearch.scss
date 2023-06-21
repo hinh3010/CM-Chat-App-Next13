@@ -1,0 +1,8 @@
+.input-search {
+  border: 1px solid rgb(174 187 205 / 1);
+  &:focus,
+  &:focus-visible,
+  &:focus-within {
+    border: 1px solid #2563eb;
+  }
+}

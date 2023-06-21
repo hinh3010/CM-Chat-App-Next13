@@ -1,11 +1,10 @@
 'use client'
 import Avatar from "./ui/Avatar";
-import InputSearch from "./ui/InputSearch";
 
 const ConversationItem = () => {
     return (
         <div
-            className="mt-4 flex items-start justify-between shadow-xl rounded-xl p-6"
+            className="my-2 flex items-start justify-between shadow-xl rounded-xl py-4 px-6 cursor-pointer"
             style={{
                 backgroundColor: '#fcfdff'
             }}

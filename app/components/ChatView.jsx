@@ -1,15 +1,19 @@
 "use client";
 
+import moment from "moment";
+
 const data = [
     {
         userId: 1,
         message: "adu adu adu adu adu adu adu adu adu adu",
         attachment: null,
+        createdAt: Date.now(),
     },
     {
         userId: 1,
         message: "adu adu adu adu adu adu adu adu adu adu",
         attachment: null,
+        createdAt: Date.now(),
     },
     {
         userId: 2,
@@ -18,43 +22,133 @@ const data = [
             fileUrl: "",
             fileType: "image",
         },
+        createdAt: Date.now(),
+    },
+    {
+        userId: 1,
+        message: "adu adu adu adu adu adu adu adu adu adu",
+        attachment: null,
+        createdAt: Date.now(),
+    },
+    {
+        userId: 1,
+        message: "adu adu adu adu adu adu adu adu adu adu",
+        attachment: null,
+        createdAt: Date.now(),
+    },
+    {
+        userId: 2,
+        message: "adu adu adu adu adu adu adu adu adu adu",
+        attachment: {
+            fileUrl: "",
+            fileType: "image",
+        },
+        createdAt: Date.now(),
+    },
+    {
+        userId: 1,
+        message: "adu adu adu adu adu adu adu adu adu adu",
+        attachment: null,
+        createdAt: Date.now(),
+    },
+    {
+        userId: 1,
+        message: "adu adu adu adu adu adu adu adu adu adu",
+        attachment: null,
+        createdAt: Date.now(),
+    },
+    {
+        userId: 2,
+        message: "adu adu adu adu adu adu adu adu adu adu",
+        attachment: {
+            fileUrl: "",
+            fileType: "image",
+        },
+        createdAt: Date.now(),
+    },
+    {
+        userId: 1,
+        message: "adu adu adu adu adu adu adu adu adu adu",
+        attachment: null,
+        createdAt: Date.now(),
+    },
+    {
+        userId: 1,
+        message: "adu adu adu adu adu adu adu adu adu adu",
+        attachment: null,
+        createdAt: Date.now(),
+    },
+    {
+        userId: 2,
+        message: "adu adu adu adu adu adu adu adu adu adu",
+        attachment: {
+            fileUrl: "",
+            fileType: "image",
+        },
+        createdAt: Date.now(),
+    },
+    {
+        userId: 1,
+        message: "adu adu adu adu adu adu adu adu adu adu",
+        attachment: null,
+        createdAt: Date.now(),
+    },
+    {
+        userId: 2,
+        message: "adu adu adu adu adu adu adu adu adu adu",
+        attachment: {
+            fileUrl: "",
+            fileType: "image",
+        },
+        createdAt: Date.now(),
     },
 ];
 
 const ChatView = () => {
     return (
-        <div className="h-full w-full p-10 flex flex-col">
+        <div className="w-full p-10">
             <section
-                className="rounded-3xl"
+                className="rounded-3xl mt-2 py-4 px-6"
                 style={{
-                    backgroundColor: '#5B96F7',
+                    backgroundColor: '#FFFFFF',
                     maxWidth: "40%",
-                    padding: '10px 15px',
-                    marginTop: '1.6rem',
                     marginRight: 'auto'
                 }}
             >
                 <span
                     style={{
                         fontSize: "1.4rem",
-                        fontWeight: '600',
+                        fontWeight: '500',
                         lineHeight: '1.8rem',
-                        color: '#FFFFFF'
+                        color: '#696969'
                     }}
                 >
                     adu adu adu adu adu adu adu adu adu adu
+                    Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                    Culpa enim distinctio mollitia facere fuga laboriosam.
+                    Possimus est iusto ex fugit atque doloremque consequatur
+                    quas nesciunt voluptatem. Ut minima hic ad.
                 </span>
+                <p
+                    style={{
+                        fontSize: "1rem",
+                        fontWeight: '400',
+                        lineHeight: '1.5rem',
+                        color: '#696969',
+                        textAlign: 'end'
+                    }}
+                >
+                    09:20
+                </p>
             </section>
             {
                 data.map((chat, i) => (
                     <section
                         key={i}
-                        className="rounded-3xl"
+                        className="rounded-3xl mt-2 py-4 px-6"
                         style={{
-                            backgroundColor: '#5B96F7',
+                            backgroundColor: chat.userId === 1 ? '#5B96F7' : '#FFFFFF',
                             maxWidth: "40%",
-                            padding: '10px 15px',
-                            marginTop: '1.6rem',
                             marginLeft: chat.userId === 1 ? 'auto' : 0,
                             marginRight: chat.userId === 2 ? 'auto' : 0,
                         }}
@@ -62,15 +156,28 @@ const ChatView = () => {
                         <span
                             style={{
                                 fontSize: "1.4rem",
-                                fontWeight: '600',
+                                fontWeight: '500',
                                 lineHeight: '1.8rem',
-                                color: '#FFFFFF'
+                                color: chat.userId === 1 ? '#FFFFFF' : '#696969'
                             }}
                         >
                             {
                                 chat.message
                             }
                         </span>
+                        <p
+                            style={{
+                                fontSize: "1rem",
+                                fontWeight: '400',
+                                lineHeight: '1.5rem',
+                                color: chat.userId === 1 ? '#FFFFFF' : '#696969',
+                                textAlign: 'end'
+                            }}
+                        >
+                            {
+                                moment(chat.createdAt).format('hh:mm')
+                            }
+                        </p>
                     </section>
                 ))
             }

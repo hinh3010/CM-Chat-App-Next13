@@ -3,7 +3,7 @@ import Logo from "./ui/Logo";
 
 const InputChat = () => {
     return (
-        <div className="h-36 w-full flex items-center justify-between px-10 py-8 shadow-2xl">
+        <div className="h-28 w-full flex items-center justify-between px-10 shadow-2xl">
             <div className="relative flex-1 mr-10">
                 <div className="flex absolute inset-y-0 left-8 items-center pointer-events-none">
                     <svg
@@ -13,9 +13,9 @@ const InputChat = () => {
                         xmlns="http://www.w3.org/2000/svg"
                     >
                         <path
-                            fill-rule="evenodd"
+                            fillRule="evenodd"
                             d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                            clip-rule="evenodd"
+                            clipRule="evenodd"
                         ></path>
                     </svg>
                 </div>

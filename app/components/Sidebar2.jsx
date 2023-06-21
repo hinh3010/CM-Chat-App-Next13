@@ -2,17 +2,17 @@
 import Conversations from "./Conversations";
 import Navbar from "./Navbar";
 
-const Sidebar = () => {
+const Sidebar2 = () => {
     return (
-        <div className="h-full w-full grid grid-cols-5">
+        <nav className="h-full grid grid-cols-6" style={{ width: '420px' }}>
             <section className="col-span-1">
                 <Navbar />
             </section>
-            <section className="col-span-4 shadow-2xl">
+            <section className="col-span-5 shadow-2xl">
                 <Conversations />
             </section>
-        </div>
+        </nav>
     );
 }
 
-export default Sidebar;
+export default Sidebar2;

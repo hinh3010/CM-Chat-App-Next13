@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --size-scrollbar: 4px;
+    --size-scrollbar: 6px;
 
     --color-primary: 167, 27, 74; /* #A71B4A*/
     --color-secondary: 74, 76, 90; /* #4a4c5a*/
@@ -77,7 +77,7 @@ body {
 
 ::-webkit-scrollbar-thumb {
   border-radius: 4px;
-  background-color: #a71b4a;
+  background-color: #7589a3;
   border-radius: 100vw;
 }
 

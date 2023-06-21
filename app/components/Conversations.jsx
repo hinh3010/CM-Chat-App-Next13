@@ -8,9 +8,9 @@ const Conversations = () => {
             {/* contact search */}
             <section className="flex flex-col items-center px-8">
                 <InputSearch />
-                <hr style={{ border: '1px solid #333', width: '100%', height: '1px', margin: '10px 0' }} />
+                <hr className="opacity-50 my-4" style={{ borderTop: '1px solid #333', width: '100%', height: '1px' }} />
             </section >
-            <section className="flex flex-col px-8"
+            <section className="flex flex-col px-4 -mt-2"
                 style={{
                     overflow: 'overlay'
                 }}
