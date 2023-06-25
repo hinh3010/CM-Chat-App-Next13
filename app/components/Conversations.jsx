@@ -10,7 +10,7 @@ const Conversations = () => {
                 <InputSearch />
                 <hr className="opacity-50 my-4" style={{ borderTop: '1px solid #333', width: '100%', height: '1px' }} />
             </section >
-            <section className="flex flex-col px-4 -mt-2"
+            <section className="flex flex-col px-4 -mt-2 scrollbar-none"
                 style={{
                     overflow: 'overlay'
                 }}
