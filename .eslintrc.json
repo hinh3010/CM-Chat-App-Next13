@@ -1,6 +1,11 @@
 {
   "extends": "next/core-web-vitals",
   "rules": {
-    "no-unused-vars": "warn"
+    "no-unused-vars": "warn",
+    "no-undef": "error"
+  },
+   "globals": {
+    "Promise": "readonly",
+    "ArrayBuffer":"readonly"
   }
 }
