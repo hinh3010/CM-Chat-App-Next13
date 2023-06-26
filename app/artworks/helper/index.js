@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { PREFIX_LOG } from '../const'
 
 export const downloadJSON = (blob, filename) => {
     const url = URL.createObjectURL(blob)
@@ -16,46 +17,6 @@ export const convertBase64ToBlob = (base64, type = 'png') => {
 }
 
 /**
- *
- * @param {object} data
- * @param {Uint8ClampedArray} data.composite
- * @param {number} data.width
- * @param {number} data.height
- * @param {number|undefined} data.x
- * @param {number|undefined} data.y
- * @returns {HTMLCanvasElement}
- */
-export const generateCanvas = (data) => {
-    const { width, height, composite, x = 0, y = 0 } = data
-
-    const canvasEl = document.createElement('canvas')
-    const context = canvasEl.getContext('2d')
-
-    canvasEl.width = width
-    canvasEl.height = height
-
-    // const imageData = context.createImageData(width, height)
-    // imageData.data.set(composite)
-    const imageData = new ImageData(composite, width, height)
-
-    context.putImageData(imageData, x, y)
-
-    return canvasEl
-}
-
-/**
- * @param {HTMLCanvasElement} data
- * @returns {Promise<Blob>}
- */
-export const canvasToBlob = async (canvasEl) => {
-    const blob = await new Promise((resolve) => {
-        canvasEl.toBlob((blob) => resolve(blob))
-    })
-
-    return blob
-}
-
-/**
  * @param {string} url
  * @returns {Promise<Blob | null>}
  */
@@ -68,38 +29,6 @@ export async function fetchBlob(url) {
         return null
     }
 }
-
-// /**
-//  * @param {string} staticFile
-//  * @param {URL|string} url
-//  *  @param {Function} callback - The callback function to handle the result and error.
-//  */
-// export const uploadBinary = async (staticFile, url, callback) => {
-//     const blob = await fetchBlob(staticFile)
-//     if (!blob) callback(null, 'Static file not found')
-
-//     const fileReader = new FileReader()
-//     fileReader.onload = function () {
-//         const buffer = fileReader.result
-//         axios
-//             .put(url, buffer, {
-//                 headers: {
-//                     'Content-Type': 'image/png',
-//                 },
-//             })
-//             .then((response) => {
-//                 callback(response.config.url?.split('?')[0], null)
-//                 return response
-//             })
-//             .catch((error) => {
-//                 callback(null, error)
-//             })
-//     }
-//     fileReader.onerror = function () {
-//         callback(null, fileReader.error)
-//     }
-//     fileReader.readAsArrayBuffer(blob)
-// }
 
 /**
  * @param {string} staticFile
@@ -162,6 +91,94 @@ export const readFileAsArrayBuffer = (file) => {
     }
 }
 
-export const capitalizeText = (text) => {
-    return text && text.charAt(0).toUpperCase() + text.slice(1)
+/**
+ *
+ * @param {object} data
+ * @param {Uint8ClampedArray} data.composite
+ * @param {number} data.width
+ * @param {number} data.height
+ * @param {number|undefined} data.x
+ * @param {number|undefined} data.y
+*/
+//  * @returns {HTMLCanvasElement}
+export const generateCanvasUseWorker = async (data) => {
+    const { width, height, composite, x = 0, y = 0 } = data
+
+    // In worker
+    const canvas = new OffscreenCanvas(width, height);
+    const context = canvas.getContext("2d");
+
+    // Check if composite is a Uint8ClampedArray
+    if (!(composite instanceof Uint8ClampedArray)) {
+        throw new Error("Invalid composite data");
+    }
+
+
+    // Draw pictures on canvas
+    const imageData = new ImageData(composite, width, height)
+    context.putImageData(imageData, x, y)
+
+    const createImageBitmapMessage = `${PREFIX_LOG} Creating bitmaps`
+    console.time(createImageBitmapMessage)
+    const imageBitmap = await createImageBitmap(canvas)
+    const blob = await imageBitmapToBlob(imageBitmap);
+    console.log("🚀 ~ file: index.js:125 ~ generateCanvasUseWorker ~ blob:", blob)
+    console.timeEnd(createImageBitmapMessage)
+
+    return canvas
+}
+
+const imageBitmapToBlob = (imageBitmap) => {
+    const canvas = new OffscreenCanvas(imageBitmap.width, imageBitmap.height);
+    const context = canvas.getContext("2d");
+    context.drawImage(imageBitmap, 0, 0);
+    return canvas.convertToBlob();
+};
+
+/**
+ *
+ * @param {object} data
+ * @param {Uint8ClampedArray} data.composite
+ * @param {number} data.width
+ * @param {number} data.height
+ * @param {number|undefined} data.x
+ * @param {number|undefined} data.y
+ * @returns {HTMLCanvasElement}
+ */
+export const generateCanvas = (data) => {
+    const { width, height, composite, x = 0, y = 0 } = data
+
+    const canvas = document.createElement('canvas')
+    const context = canvas.getContext('2d')
+
+    canvas.width = width
+    canvas.height = height
+
+    // const imageData = context.createImageData(width, height)
+    // imageData.data.set(composite)
+    const imageData = new ImageData(composite, width, height)
+
+    context.putImageData(imageData, x, y)
+
+    return canvas
+}
+
+/**
+ * @param {HTMLCanvasElement} canvas
+ * @returns {Promise<Blob>}
+ */
+export const canvasToBlob = async (canvas) => {
+    console.log("🚀 ~ file: index.js:175 ~ canvasToBlob ~ canvas:", canvas)
+    const blob = await new Promise((resolve, reject) => {
+        // canvas.toBlob((blob) => resolve(blob))
+        canvas.toBlob(function (blob) {
+            if (blob) {
+                resolve(blob);
+            } else {
+                reject(new Error("Failed to convert canvas to blob"));
+            }
+        }, "image/png");
+    })
+
+    return blob
 }

@@ -6,6 +6,7 @@
   },
    "globals": {
     "Promise": "readonly",
-    "ArrayBuffer":"readonly"
+    "ArrayBuffer":"readonly",
+    "Uint8ClampedArray":"readonly"
   }
 }

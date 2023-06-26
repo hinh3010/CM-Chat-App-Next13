@@ -1,1 +1,3 @@
-export const PREFIX_LOG = `[mockup-generator]`
+export const PREFIX_LOG = '[UPLOAD ARTWORK]';
+export const WORKER_PARSE_ARTWORK = 'WORKER_PARSE_ARTWORK';
+export const WORKER_PARSE_LAYER_ARTWORK = 'WORKER_PARSE_LAYER_ARTWORK';

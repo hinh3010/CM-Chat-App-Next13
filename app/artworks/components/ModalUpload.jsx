@@ -1,15 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import Image from "next/image";
-import { useId, useState } from "react";
-import Modal from "~/app/components/ui/Modal";
-import { images } from "~/public/images";
-import { PREFIX_LOG } from "../const";
-import ProgressBar from "~/app/components/ui/ProgressBar";
 import Psd from "@webtoon/psd";
-import { canvasToBlob, generateCanvas } from "../helper";
-import Bluebird from 'bluebird'
+import Bluebird from 'bluebird';
+import Image from "next/image";
+import { useEffect, useId, useRef, useState } from "react";
+import Modal from "~/app/components/ui/Modal";
+import ProgressBar from "~/app/components/ui/ProgressBar";
+import { images } from "~/public/images";
+import { PREFIX_LOG, WORKER_PARSE_ARTWORK } from "../const";
+import { canvasToBlob, generateCanvas, readFileAsArrayBuffer } from "../helper";
+import { createMessage } from "../helper/messaging";
 
 function ModalUpload({ onCancel, onOk }) {
     const id = useId()
@@ -42,7 +43,25 @@ function ModalUpload({ onCancel, onOk }) {
 
     const [imageURL, setImageURL] = useState(null)
 
+    const workerRef = useRef(null)
+    useEffect(() => {
+        workerRef.current = new Worker(new URL('../helper/worker.js', import.meta.url), {
+            type: "module",
+        })
+        workerRef.current.onmessage = (event) =>
+            console.log('WebWorker Response =>', event.data)
+        return () => {
+            workerRef.current?.terminate()
+        }
+    }, [])
+
     const uploadFile = async (file) => {
+        readFileAsArrayBuffer(file).then((buffer) => {
+            workerRef.current?.postMessage(createMessage(WORKER_PARSE_ARTWORK, buffer), [buffer]);
+        });
+        return
+
+
         let artworkContainer = null
         const artworkLayers = []
         console.time(`${PREFIX_LOG}[upload image]`)
