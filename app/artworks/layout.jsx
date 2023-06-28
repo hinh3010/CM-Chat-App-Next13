@@ -52,7 +52,7 @@ export default function RootLayout({ children }) {
                     maxWidth: "1600px",
                     margin: "0 auto",
                     height: "100vh",
-                    overflow: 'hidden',
+                    overflow: 'auto',
                     display: 'flex',
                     flexDirection: 'column',
                 }}
@@ -60,7 +60,7 @@ export default function RootLayout({ children }) {
                 <section className="w-full px-2">
                     <Header />
                 </section>
-                <section className="w-full flex-1 overflow-auto">
+                <section className="w-full flex-1">
                     {children}
                 </section>
             </body>

@@ -1,26 +1,14 @@
-import Canvas from "./components/Canvas";
-import Customize from "./components/Customize";
-import ListLayers from "./components/ListLayers";
+import FilterArtworks from "./components/FilterArtworks";
+import ListArtworks from "./components/ListArtworks";
 
 export default function Page() {
     return (
         <main
-            className="h-full w-full shadow-lg grid grid-cols-4"
+            className="h-full w-full shadow-lg p-2"
         >
-            <section
-                className="w-full h-full col-span-1  p-2"
-            >
-                <ListLayers />
-            </section>
-            <section
-                className="w-full h-full col-span-2 p-2"
-            >
-                <Canvas />
-            </section>
-            <section
-                className="w-full h-full col-span-1 p-2"
-            >
-                <Customize />
+            <section className="w-full h-full border rounded-2xl p-2 bg-white">
+                <FilterArtworks />
+                <ListArtworks />
             </section>
         </main>
     )

@@ -2,9 +2,9 @@
 
 import "./inputSearch.scss";
 
-function InputSearch() {
+function InputSearch({ className, ...rest }) {
     return (
-        <form className="flex items-center">
+        <form className={"flex items-center " + className} {...rest}>
             <label htmlFor="voice-search" className="sr-only">
                 Search
             </label>

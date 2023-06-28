@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { PREFIX_LOG } from '../const'
 
 export const downloadJSON = (blob, filename) => {
     const url = URL.createObjectURL(blob)
@@ -113,27 +112,12 @@ export const generateCanvasUseWorker = async (data) => {
         throw new Error("Invalid composite data");
     }
 
-
     // Draw pictures on canvas
     const imageData = new ImageData(composite, width, height)
     context.putImageData(imageData, x, y)
 
-    const createImageBitmapMessage = `${PREFIX_LOG} Creating bitmaps`
-    console.time(createImageBitmapMessage)
-    const imageBitmap = await createImageBitmap(canvas)
-    const blob = await imageBitmapToBlob(imageBitmap);
-    console.log("🚀 ~ file: index.js:125 ~ generateCanvasUseWorker ~ blob:", blob)
-    console.timeEnd(createImageBitmapMessage)
-
-    return canvas
+    return canvas.convertToBlob()
 }
-
-const imageBitmapToBlob = (imageBitmap) => {
-    const canvas = new OffscreenCanvas(imageBitmap.width, imageBitmap.height);
-    const context = canvas.getContext("2d");
-    context.drawImage(imageBitmap, 0, 0);
-    return canvas.convertToBlob();
-};
 
 /**
  *

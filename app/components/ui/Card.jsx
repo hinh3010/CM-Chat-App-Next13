@@ -1,5 +1,8 @@
 'use client'
-/* eslint-disable @next/next/no-img-element */
+
+import Image from "next/image";
+import React from "react";
+
 function Card() {
     const [loading, setLoading] = React.useState(true);
 
@@ -7,7 +10,7 @@ function Card() {
         <div className="p-8 w-full min-h-full flex items-center justify-center">
             <div className="w-full h-auto overflow-hidden shadow-lg flex items-start justify-start flex-col border dark:border-gray-800 rounded-lg">
                 <div className="w-full flex items-center justify-center border-b dark:border-gray-800 relative">
-                    <img
+                    <Image
                         alt="Forest"
                         src="https://source.unsplash.com/1200x630/?forest"
                         width="1200"
