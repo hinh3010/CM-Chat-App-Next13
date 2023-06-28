@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-function ProgressBar({ value }) {
+function ProgressBar({ value, className }) {
     const [width, setWidth] = useState(45);
 
     useEffect(() => {
@@ -9,7 +9,7 @@ function ProgressBar({ value }) {
 
     return (
         <div
-            className="shimmer w-full bg-gray-200 rounded-full h-4 mt-8 dark:bg-gray-700"
+            className={"shimmer w-full bg-gray-200 rounded-full dark:bg-gray-700 " + className}
             style={{ height: "10px" }}
         >
             {/* <div

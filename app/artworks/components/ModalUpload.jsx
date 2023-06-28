@@ -7,11 +7,14 @@ import Modal from "~/app/components/ui/Modal";
 import ProgressBar from "~/app/components/ui/ProgressBar";
 import { images } from "~/public/images";
 import { WORKER_PARSE_ARTWORK, WORKER_PARSE_LAYER_ARTWORK } from "../const";
-import { readFileAsArrayBuffer } from "../helper";
+import { generateBlob, generateBlobUseOffscreenCanvas, isSupportedOffscreenCanvas, readFileAsArrayBuffer } from "../helper";
 import { createMessage } from "../helper/messaging";
 
 function ModalUpload({ onCancel, onOk }) {
+    const workerRef = useRef(null)
     const id = useId()
+    const [currentFileUrl, setCurrentFileUrl] = useState('')
+    const [pending, setPending] = useState(false)
 
     const handleDragOver = (e) => {
         e.preventDefault()
@@ -26,7 +29,6 @@ function ModalUpload({ onCancel, onOk }) {
         return uploadFile(file)
     }
 
-    const [currentFileUrl, setCurrentFileUrl] = useState('')
     const onSelectFile = async (e) => {
         e.preventDefault()
         e.stopPropagation()
@@ -39,29 +41,52 @@ function ModalUpload({ onCancel, onOk }) {
         setCurrentFileUrl('')
     }
 
-    const [imageURL, setImageURL] = useState(null)
+    const uploadFile = async (file) => {
+        setPending(true)
+        readFileAsArrayBuffer(file).then((buffer) => {
+            workerRef.current?.postMessage(createMessage(WORKER_PARSE_ARTWORK, buffer), [buffer]);
+        })
 
-    const workerRef = useRef(null)
+        workerRef.current.onmessage = async (event) => {
+            console.log('WebWorker Response =>', event.data)
+            const { message, value: artworkPayloads } = event.data
+            if (message !== WORKER_PARSE_LAYER_ARTWORK) return
+
+            console.log('WebWorker Response', artworkPayloads)
+
+            const createBlob = isSupportedOffscreenCanvas() ? generateBlobUseOffscreenCanvas : generateBlob
+
+            for (const [idx, layer] of artworkPayloads.entries()) {
+                const blob = await createBlob({
+                    width: layer.width,
+                    height: layer.height,
+                    composite: layer.image,
+                })
+
+                const imageURL = URL.createObjectURL(blob)
+                layer.image = imageURL
+
+                if (idx === 0) {
+                    layer.name = file.name
+                    layer.mimeType = file.type
+                }
+            }
+
+            setPending(false)
+        }
+    }
+
     useEffect(() => {
         workerRef.current = new Worker(new URL('../helper/worker.js', import.meta.url), {
             type: "module",
         })
-        workerRef.current.onmessage = (event) => {
-            console.log('WebWorker Response =>', event.data)
-            const { message, value } = event.data
-            if (message !== WORKER_PARSE_LAYER_ARTWORK) return
-            setImageURL(URL.createObjectURL(value[0].image))
-        }
+        // workerRef.current.onmessage = (event) => {
+        //     console.log('WebWorker Response =>', { adu: event.data })
+        // }
         return () => {
             workerRef.current?.terminate()
         }
     }, [])
-
-    const uploadFile = async (file) => {
-        readFileAsArrayBuffer(file).then((buffer) => {
-            workerRef.current?.postMessage(createMessage(WORKER_PARSE_ARTWORK, buffer), [buffer]);
-        });
-    }
 
     return (
         <Modal
@@ -75,28 +100,31 @@ function ModalUpload({ onCancel, onOk }) {
                 onDragOver={handleDragOver}
                 onDrop={handleDrop}
             >
-                <label
-                    htmlFor={id}
-                    className="
-                        cursor-pointer w-full h-full 
-                        flex items-center justify-center 
-                        flex-col text-blue-700
-                    "
-                >
-                    <input
-                        id={id} type="file"
-                        className="hidden"
-                        onChange={onSelectFile}
-                        value={currentFileUrl}
-                        accept="psd"
-                    />
-                    <Image className='w-24 h-24' src={images.uploadIcon} alt="" />
-                    <p className="text-2xl mt-4">
-                        Click or drag and drop file to upload
-                    </p>
-                    <ProgressBar />
-                    {imageURL && <img className="h-full w-auto object-cover" src={imageURL} alt="" />}
-                </label>
+                {
+                    pending ?
+                        <ProgressBar className="m-auto" />
+                        : <label
+                            htmlFor={id}
+                            className="
+                                cursor-pointer w-full h-full 
+                                flex items-center justify-center 
+                                flex-col text-blue-700
+                            "
+                        >
+
+                            :<input
+                                id={id} type="file"
+                                className="hidden"
+                                onChange={onSelectFile}
+                                value={currentFileUrl}
+                                accept="psd"
+                            />
+                            <Image className='w-24 h-24' src={images.uploadIcon} alt="" />
+                            <p className="text-2xl mt-4">
+                                Click or drag and drop file to upload
+                            </p>
+                        </label>
+                }
             </div>
         </Modal >
     );

@@ -90,6 +90,7 @@ export const readFileAsArrayBuffer = (file) => {
     }
 }
 
+
 /**
  *
  * @param {object} data
@@ -98,19 +99,19 @@ export const readFileAsArrayBuffer = (file) => {
  * @param {number} data.height
  * @param {number|undefined} data.x
  * @param {number|undefined} data.y
-*/
-//  * @returns {HTMLCanvasElement}
-export const generateCanvasUseWorker = async (data) => {
+ * @returns {Promise<Blob>}
+ */
+export const generateBlobUseOffscreenCanvas = async (data) => {
     const { width, height, composite, x = 0, y = 0 } = data
-
-    // In worker
-    const canvas = new OffscreenCanvas(width, height);
-    const context = canvas.getContext("2d");
 
     // Check if composite is a Uint8ClampedArray
     if (!(composite instanceof Uint8ClampedArray)) {
-        throw new Error("Invalid composite data");
+        throw new Error('Invalid composite data')
     }
+
+    // In worker must use OffscreenCanvas because there is no document element
+    const canvas = new OffscreenCanvas(width, height)
+    const context = canvas.getContext('2d')
 
     // Draw pictures on canvas
     const imageData = new ImageData(composite, width, height)
@@ -122,15 +123,20 @@ export const generateCanvasUseWorker = async (data) => {
 /**
  *
  * @param {object} data
- * @param {Uint8ClampedArray} data.composite
+ * @param {Uint8ClampedArray} data.compositeBuffer
  * @param {number} data.width
  * @param {number} data.height
  * @param {number|undefined} data.x
  * @param {number|undefined} data.y
- * @returns {HTMLCanvasElement}
+ * @returns {Promise<Blob>}
  */
-export const generateCanvas = (data) => {
+export const generateBlob = async (data) => {
     const { width, height, composite, x = 0, y = 0 } = data
+
+    // Check if composite is a Uint8ClampedArray
+    if (!(composite instanceof Uint8ClampedArray)) {
+        throw new Error('Invalid composite data')
+    }
 
     const canvas = document.createElement('canvas')
     const context = canvas.getContext('2d')
@@ -138,31 +144,96 @@ export const generateCanvas = (data) => {
     canvas.width = width
     canvas.height = height
 
+    // Draw pictures on canvas
+    const imageData = new ImageData(composite, width, height)
     // const imageData = context.createImageData(width, height)
     // imageData.data.set(composite)
-    const imageData = new ImageData(composite, width, height)
 
     context.putImageData(imageData, x, y)
 
-    return canvas
+    return convertToBlob(canvas)
 }
 
 /**
- * @param {HTMLCanvasElement} canvas
+ * @param {HTMLCanvasElement} data
  * @returns {Promise<Blob>}
  */
-export const canvasToBlob = async (canvas) => {
-    console.log("🚀 ~ file: index.js:175 ~ canvasToBlob ~ canvas:", canvas)
-    const blob = await new Promise((resolve, reject) => {
-        // canvas.toBlob((blob) => resolve(blob))
-        canvas.toBlob(function (blob) {
-            if (blob) {
-                resolve(blob);
-            } else {
-                reject(new Error("Failed to convert canvas to blob"));
-            }
-        }, "image/png");
+export const convertToBlob = async (canvasEl) => {
+    const blob = await new Promise((resolve) => {
+        canvasEl.toBlob((blob) => resolve(blob))
     })
-
     return blob
 }
+
+/**
+ * @param {import('@webtoon/psd').NodeChild[]} psdLayers
+ */
+export const getArtworkLayers = async (psdLayers) => {
+    let index = 1
+    /**
+     * @param {import('@webtoon/psd').NodeChild[]} nodeChild
+     */
+    async function drawLayers(nodeChild, group = null) {
+        const artworkLayers = []
+
+        for (const layer of nodeChild) {
+            if (layer.isHidden) continue
+
+            const { width, height, left, top, name, text, composedOpacity, type } = layer
+
+            if (type === 'Layer') {
+                /**
+                 * @type {Uint8ClampedArray}
+                 */
+                const composite = await layer.composite(true, true)
+
+                const artworkLayer = {
+                    width,
+                    height,
+                    name,
+                    type: text ? 'text' : 'image',
+                    font: 'Roboto',
+                    image: composite,
+                    text: text || '',
+                    x: left,
+                    y: top,
+                    index: index++,
+                    metadata: {
+                        opacity: composedOpacity || 1,
+                    },
+                }
+
+                if (group && typeof group === 'object') {
+                    artworkLayer.groupdata = {
+                        groupName: group.name || `Group ${group.id || ''}`,
+                        level: group.level || 1,
+                        groupId: group.id || null,
+                        opacity: group.composedOpacity || 1,
+                    }
+                    artworkLayer.metadata.opacity = (composedOpacity || 1) / (group.composedOpacity || 1)
+                }
+
+                artworkLayers.push(artworkLayer)
+            } else if (type === 'Group') {
+                const groupId = layer.layerFrame && layer.layerFrame.id ? layer.layerFrame.id : null
+
+                const groupAttr = {
+                    level: group && typeof group === 'object' ? group.level++ : 0,
+                    name,
+                    composedOpacity,
+                    id: groupId,
+                }
+                const artworkLayerItems = await drawLayers(layer.children, groupAttr)
+                artworkLayers.push(...artworkLayerItems)
+            }
+        }
+
+        return artworkLayers
+    }
+
+    const artworkLayers = await drawLayers(psdLayers)
+    return artworkLayers
+}
+
+export const isSupportedWorker = () => !!window.Worker && typeof Worker !== 'undefined'
+export const isSupportedOffscreenCanvas = () => !!window.OffscreenCanvas && typeof OffscreenCanvas !== 'undefined'
