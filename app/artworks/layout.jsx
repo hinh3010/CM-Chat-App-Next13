@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 import Header from "./components/Header";
 import './styles.scss'
+import { Providers } from "../provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -57,12 +58,14 @@ export default function RootLayout({ children }) {
                     flexDirection: 'column',
                 }}
             >
-                <section className="w-full px-2">
-                    <Header />
-                </section>
-                <section className="w-full flex-1">
-                    {children}
-                </section>
+                <Providers>
+                    <section className="w-full px-2">
+                        <Header />
+                    </section>
+                    <section className="w-full flex-1 p-2">
+                        {children}
+                    </section>
+                </Providers>
             </body>
         </html>
     );

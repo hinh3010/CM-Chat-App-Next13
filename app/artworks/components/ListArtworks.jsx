@@ -1,9 +1,6 @@
 'use client'
 
-import Image from "next/image";
-import { useState } from "react";
-import Card from "~/app/artworks/components/Card";
-import { images } from "~/public/images";
+import Card from "@/artworks/components/Card";
 
 
 //  [...Array(10).keys()]
@@ -17,8 +14,6 @@ const array = Array.from({ length: 10 }, (_, index) => ({
 }))
 
 const ListArtworks = () => {
-    const [loading, setLoading] = useState(true);
-    const [imageErr, setImageErr] = useState(false)
     return (
         <ul className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {
