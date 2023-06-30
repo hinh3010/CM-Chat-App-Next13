@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import path from 'path';
 import { SCHEMAS_MODEL } from './schemas';
 
-const connectDB = (uri, dbName) => {
+const createConnectDB = (uri, dbName) => {
     const mongodb = mongoose.createConnection(uri,
         {
             useNewUrlParser: true,
@@ -38,4 +38,4 @@ const getModel = (modelName, schemasDir = path.join(__dirname, './schemas')) => 
     return mongoose.model(modelName, schema);
 };
 
-export { connectDB, getModel };
+export { createConnectDB, getModel };
