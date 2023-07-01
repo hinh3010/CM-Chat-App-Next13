@@ -9,9 +9,12 @@ import { images } from "~/public/images";
 import { WORKER_PARSE_ARTWORK, WORKER_PARSE_LAYER_ARTWORK } from "../const";
 import { generateBlob, generateBlobUseOffscreenCanvas, isSupportedOffscreenCanvas, readFileAsArrayBuffer } from "../helper";
 import { createMessage } from "../helper/messaging";
+import { useDispatch } from "react-redux";
+import { artworkDetailActions } from "~/stores/reducers/artworkDetail.reducer";
 
 function ModalUpload({ onCancel, onOk }) {
     const workerRef = useRef(null)
+    const dispatch = useDispatch()
     const id = useId()
     const [currentFileUrl, setCurrentFileUrl] = useState('')
     const [pending, setPending] = useState(false)
@@ -49,12 +52,14 @@ function ModalUpload({ onCancel, onOk }) {
 
         workerRef.current.onmessage = async (event) => {
             console.log('WebWorker Response =>', event.data)
-            const { message, value: artworkPayloads } = event.data
+            const { message, value } = event.data
             if (message !== WORKER_PARSE_LAYER_ARTWORK) return
 
-            console.log('WebWorker Response', artworkPayloads)
+            console.log('WebWorker Response', value)
 
             const createBlob = isSupportedOffscreenCanvas() ? generateBlobUseOffscreenCanvas : generateBlob
+
+            const artworkPayloads = [...value]
 
             for (const [idx, layer] of artworkPayloads.entries()) {
                 const blob = await createBlob({
@@ -68,9 +73,13 @@ function ModalUpload({ onCancel, onOk }) {
 
                 if (idx === 0) {
                     layer.name = file.name
-                    layer.mimeType = file.type
                 }
             }
+
+            dispatch(artworkDetailActions.createArtworkTemplates({
+                artworkContainer: artworkPayloads[0],
+                artworkLayers: artworkPayloads.splice(1, artworkPayloads.length - 1)
+            }))
 
             setPending(false)
         }

@@ -1,5 +1,5 @@
 const reduxConstant = {
-    artworkDetail: 'artwork-detail',
+    artworkDetail: 'artwork_detail',
 }
 
 export default reduxConstant

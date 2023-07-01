@@ -1,23 +1,38 @@
 'use client'
 
-// import { useCallback, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { artworkDetailActions, artworkDetailSelector } from "~/stores/reducers/artworkDetail.reducer";
 
 const Canvas = () => {
-    // const workerRef = useRef(null)
-    // useEffect(() => {
-    //     workerRef.current = new Worker(new URL('../helper/worker.js', import.meta.url), {
-    //         type: "module",
-    //     })
-    //     workerRef.current.onmessage = (event) =>
-    //         alert(`WebWorker Response => ${event.data}`)
-    //     return () => {
-    //         workerRef.current?.terminate()
-    //     }
-    // }, [])
+    const { artworkContainer, artworkLayers } = useSelector(artworkDetailSelector)
+    console.log("🚀 ~ file: ListLayers.jsx:11 ~ ListLayers ~ selectLayerIds:", artworkLayers)
+    const dispatch = useDispatch()
 
-    // const handleWork = useCallback(async () => {
-    //     workerRef.current?.postMessage('adu');
-    // }, []);
+    const editorWrapperRef = useRef()
+
+    useEffect(() => {
+        const handleResize = () => {
+            if (editorWrapperRef.current) {
+                // dispatch(artworkDetailActions.editorContainer({width: 0, height: 0}))
+                let { offsetWidth, offsetHeight } = editorWrapperRef.current
+                console.log("🚀 ~ file: Canvas.jsx:19 ~ handleResize ~ offsetWidth, offsetHeight :", offsetWidth, offsetHeight)
+                dispatch(artworkDetailActions.editorContainer({
+                    width: offsetWidth,
+                    height: offsetHeight
+                }))
+            }
+        }
+
+        handleResize()
+
+        window.addEventListener('resize', handleResize)
+
+        return () => {
+            window.removeEventListener('resize', handleResize)
+        }
+    }, [dispatch])
+
     return (
         <div className="w-full h-full border flex flex-col bg-white rounded-2xl">
             <div className="w-full h-14">
@@ -33,10 +48,7 @@ const Canvas = () => {
                     backgroundSize: '20px 20px',
                     backgroundPosition: '0 0, 10px 10px'
                 }}
-            // onClick={() => {
-            //     console.log('onClick')
-            //     handleWork()
-            // }}
+                ref={editorWrapperRef}
             >
                 <span
                     className="text-3xl font-medium cursor-pointer"

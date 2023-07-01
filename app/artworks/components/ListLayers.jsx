@@ -1,48 +1,59 @@
 'use client'
 
 import Image from "next/image";
-import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { images } from "~/public/images";
+import { artworkDetailActions, artworkDetailSelector } from "~/stores/reducers/artworkDetail.reducer";
 
 const ListLayers = () => {
-    const [loading, setLoading] = useState(true);
-    const [imageErr, setImageErr] = useState(false)
+    const { artworkLayers, selectLayerIds } = useSelector(artworkDetailSelector)
+    const dispatch = useDispatch()
+
+    // const [loading, setLoading] = useState(true);
+    // const [imageErr, setImageErr] = useState(false)
+
+    const handleClickLayerItem = (id) => {
+        id && dispatch(artworkDetailActions.selectLayerIds([id]))
+    }
+
     return (
         <div className="w-full h-full border rounded-2xl p-4 flex flex-col bg-white">
             <span
                 className="text-3xl font-medium cursor-pointer text-center py-4"
             >
-                Layers
+                Layers ({artworkLayers.length})
             </span>
             <ul className="flex-1">
                 {
-                    [...Array(10).keys()].map((item, i) => (
+                    artworkLayers.map(layer => (
+                        // [...Array(10).keys()].map((layer = {}) => (
                         <li
-                            key={i}
+                            key={layer._id}
                             style={{ background: '#F8F9FA' }}
-                            className="
-                                    p-2 rounded-lg border
-                                    transition-all ease-in-out cursor-pointer
-                                    flex items-center my-2
-                                "
+                            className={`
+                                p-2 rounded-lg border hover:border-blue-500
+                                transition-all ease-in-out cursor-pointer
+                                flex items-center my-2
+                                ${selectLayerIds.includes(layer._id) ? 'border-blue-700' : ''}
+                            `}
+                            onClick={() => handleClickLayerItem(layer._id)}
                         >
                             <Image
-                                className="object-cover rounded-lg"
+                                className="object-cover rounded-lg w-[40px] h-[40px] shadow-md bg-white"
                                 width={40}
                                 height={40}
-                                src={images.logoTextLayer}
+                                src={!layer.text ? layer.image : images.logoTextLayer}
                                 alt=""
                                 onLoad={() => {
-                                    setLoading(false);
+                                    // setLoading(false);
                                 }}
                                 onError={(e) => {
-                                    setImageErr(true)
+                                    // setImageErr(true)
                                     e.target.onerror = null
                                 }}
                             />
                             <span className="ml-4 text-2xl line-clamp-1">
-                                layer.name
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit nesciunt provident nobis natus eligendi repellat, accusamus illo molestias voluptates voluptate animi non! Assumenda culpa eius soluta molestias nemo. Obcaecati, harum.
+                                {layer.name}
                             </span>
                         </li>
                     ))

@@ -1,5 +1,5 @@
 import Psd from "@webtoon/psd";
-import { getArtworkLayers } from ".";
+import { getArtworkLayers, getArtworkLayers2 } from ".";
 import { WORKER_PARSE_ARTWORK, WORKER_PARSE_LAYER_ARTWORK } from "../const";
 import { createMessage, validateMessage } from "./messaging";
 
@@ -27,6 +27,9 @@ self.addEventListener("message", async ({ data }) => {
             width: psd.width,
             height: psd.height,
             image: composite,
+            opacity: psd.composedOpacity,
+            totalLayers: psd.layers.length,
+            mimetype: psd.type
         }
 
         const artworkLayers = await getArtworkLayers(psd.children)

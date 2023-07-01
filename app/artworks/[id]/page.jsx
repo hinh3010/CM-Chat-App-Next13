@@ -1,3 +1,4 @@
+'use client'
 import Canvas from "../components/Canvas";
 import Customize from "../components/Customize";
 import ListLayers from "../components/ListLayers";
