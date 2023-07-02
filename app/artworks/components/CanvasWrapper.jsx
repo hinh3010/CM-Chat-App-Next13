@@ -1,28 +1,26 @@
 'use client'
 
 import { useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { artworkDetailActions, artworkDetailSelector } from "~/stores/reducers/artworkDetail.reducer";
+import { useDispatch } from "react-redux";
+import { artworkDetailActions } from "~/stores/reducers/artworkDetail.reducer";
+import FabricCanvas from "./Canvas";
+import { debounce } from "~/helper";
 
-const Canvas = () => {
-    const { artworkContainer, artworkLayers } = useSelector(artworkDetailSelector)
-    console.log("🚀 ~ file: ListLayers.jsx:11 ~ ListLayers ~ selectLayerIds:", artworkLayers)
+const CanvasWrapper = () => {
     const dispatch = useDispatch()
 
     const editorWrapperRef = useRef()
 
     useEffect(() => {
-        const handleResize = () => {
+        const handleResize = debounce(() => {
             if (editorWrapperRef.current) {
-                // dispatch(artworkDetailActions.editorContainer({width: 0, height: 0}))
                 let { offsetWidth, offsetHeight } = editorWrapperRef.current
-                console.log("🚀 ~ file: Canvas.jsx:19 ~ handleResize ~ offsetWidth, offsetHeight :", offsetWidth, offsetHeight)
                 dispatch(artworkDetailActions.editorContainer({
                     width: offsetWidth,
                     height: offsetHeight
                 }))
             }
-        }
+        })
 
         handleResize()
 
@@ -50,11 +48,8 @@ const Canvas = () => {
                 }}
                 ref={editorWrapperRef}
             >
-                <span
-                    className="text-3xl font-medium cursor-pointer"
-                >
-                    Canvas
-                </span>
+                {/* <FabricJSCanvas className="sample-canvas" onReady={onReady} /> */}
+                <FabricCanvas />
             </div >
             <div className="w-full h-20">
 
@@ -63,4 +58,4 @@ const Canvas = () => {
     );
 }
 
-export default Canvas;
+export default CanvasWrapper;

@@ -6,3 +6,14 @@ export function randomId(length = 6) {
     }
     return result;
 }
+
+export function debounce(func, wait = 500) {
+    let timeoutId;
+
+    return function (...args) {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+            func.apply(this, args);
+        }, wait);
+    };
+};

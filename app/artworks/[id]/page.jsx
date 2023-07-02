@@ -1,5 +1,5 @@
 'use client'
-import Canvas from "../components/Canvas";
+import CanvasWrapper from "../components/CanvasWrapper";
 import Customize from "../components/Customize";
 import ListLayers from "../components/ListLayers";
 
@@ -16,7 +16,7 @@ function PageDetail() {
             <section
                 className="w-full h-full col-span-2 p-2"
             >
-                <Canvas />
+                <CanvasWrapper />
             </section>
             <section
                 className="w-full h-full col-span-1 p-2"
