@@ -1,23 +1,22 @@
 'use client'
 import { useEffect } from "react";
+import axiosClient from "~/helper/axiosClient";
+import toaster from "~/helper/toaster";
 import FilterArtworks from "./components/FilterArtworks";
 import ListArtworks from "./components/ListArtworks";
-import axios from "axios";
 
 export default function Page() {
 
     useEffect(() => {
         const fetchArtworks = async () => {
             try {
-                // const response = await fetch('/api/artworks', {
-                //     method: 'GET',
-                // });
+                const { artworks } = await axiosClient.get('/api/artworks')
 
-                const response = await axios.get('/api/artworks')
-
-                console.log({ response });
+                console.log({ artworks });
+                throw new Error('adu')
             } catch (error) {
-                console.error({ error });
+                console.log({ error });
+                toaster.error(error.message, { className: 'text-3xl shadow' })
             }
         }
         fetchArtworks()

@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import path from 'path';
 import { SCHEMAS_MODEL } from './schemas';
 
 const createConnectDB = (uri, dbName) => {
@@ -9,9 +8,9 @@ const createConnectDB = (uri, dbName) => {
             useUnifiedTopology: true,
             ssl: true,
             sslValidate: true,
-            socketTimeoutMS: 60000,
-            connectTimeoutMS: 30000,
-            serverSelectionTimeoutMS: 5000,
+            // socketTimeoutMS: 60000,
+            // connectTimeoutMS: 30000,
+            // serverSelectionTimeoutMS: 5000,
             dbName: dbName
         })
 
@@ -33,31 +32,20 @@ const createConnectDB = (uri, dbName) => {
 
 const validatedOptions = (options = {}) => Object.assign({ plugin: null }, options);
 
-const _getModel = (connection, schemasDir) => (collection = '', options = {}) => {
-    console.log("🚀 ~ file: index.js:37 ~ schemasDir:", schemasDir)
-    if (!SCHEMAS_MODEL[collection]) throw new Error('Model ' + collection + ' not found')
-    const opts = validatedOptions(options);
-    const file = path.join(schemasDir, `${collection}.js`);
-    console.log("🚀 ~ file: index.js:41 ~ file:", file)
-    const Schema = require(file).default;
-    console.log("🚀 ~ file: index.js:43 ~ Schema:", Schema)
-    if (opts.plugin && typeof opts.plugin === 'function') Schema.plugin(opts.plugin);
-    return connection.models[collection] || connection.model(collection, Schema);
-};
+const _getModel = (connection) => (collection = '', options = {}) => {
+    if (connection.models[collection]) return connection.models[collection]
 
-const createConnect = (connection, schemasDir = path.join(process.cwd(), 'database/schemas')) => ({
-    getModel: _getModel(connection, schemasDir),
+    const opts = validatedOptions(options);
+    if (opts.plugin && typeof opts.plugin === 'function') Schema.plugin(opts.plugin);
+
+    const Schema = SCHEMAS_MODEL[collection]
+    return connection.model(collection, Schema);
+}
+
+const createConnect = (connection) => ({
+    getModel: _getModel(connection),
     getConnection: () => connection,
 });
 
-const getModel = (connection) => (collection, Schema) => {
-    console.log('\n\n\n')
-    const schemasDir = path.join(__dirname, './schemas')
-    const file = path.join(schemasDir, `Artwork.js`);
-    const Schema2 = require(file).default;
-    console.log("🚀 ~ file: index.js:58 ~ getModel ~ file:", file)
-    console.log("🚀 ~ file: index.js:59 ~ getModel ~ Schema2:", Schema2)
-    return connection.models[collection] || connection.model(collection, Schema);
-}
+export { createConnect, createConnectDB };
 
-export { createConnectDB, createConnect, getModel };
