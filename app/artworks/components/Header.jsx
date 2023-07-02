@@ -5,9 +5,7 @@ import ModalUpload from "./ModalUpload";
 
 const Header = () => {
     const [showModal, setShowModal] = useState(false)
-    const handleUpload = () => {
-        console.log("Upload")
-    }
+
     return (
         <>
             <div className="w-full h-24 flex items-center justify-between px-8 bg-white rounded-b-2xl">
@@ -28,7 +26,7 @@ const Header = () => {
                 showModal &&
                 <ModalUpload
                     onCancel={() => setShowModal(false)}
-                    onOk={handleUpload} />
+                    onOk={() => setShowModal(false)} />
             }
         </>
     );
