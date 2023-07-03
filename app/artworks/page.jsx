@@ -13,7 +13,6 @@ export default function Page() {
                 const { artworks } = await axiosClient.get('/api/artworks')
 
                 console.log({ artworks });
-                throw new Error('adu')
             } catch (error) {
                 console.log({ error });
                 toaster.error(error.message, { className: 'text-3xl shadow' })

@@ -6,6 +6,7 @@ const nextConfig = {
             "source.unsplash.com",
             "*",
             "d5xh8as6wnpix.cloudfront.net",
+            "res.cloudinary.com"
         ],
     },
     webpack: (config) => {
