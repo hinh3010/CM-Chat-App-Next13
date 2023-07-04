@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
-import { createArtwork } from "~/server/artworks/controllers";
-import { createConnect, createConnectDB } from "~/server/database";
+import ArtworkController from "~/server/artworks/controllers";
+
+const artworkController = new ArtworkController();
+
 /**
  * 
  * @param {Request} request 
@@ -8,25 +10,26 @@ import { createConnect, createConnectDB } from "~/server/database";
  */
 export async function POST(request) {
     try {
-        const newArtwork = await createArtwork(request)
+        const newArtwork = await artworkController.createArtwork(request)
 
         return NextResponse.json({ artwork: newArtwork });
     } catch (error) {
-        console.log("🚀 ~ file: route.js:34 ~ POST ~ error:", error.message)
-        return new NextResponse("Internal Error", { status: 500, error: error.message });
+        console.log("🚀 ~ file: route.js:16 ~ POST ~ error:", error.message)
+        return new NextResponse("Internal Error", { status: error.status || 500, error: error.message });
     }
 }
 
-export async function GET() {
+/**
+ * 
+ * @param {Request} request 
+ * @returns 
+ */
+export async function GET(request) {
     try {
-        const connect = createConnectDB(process.env.MONGO_URI, 'artworks');
-        const { getModel } = createConnect(connect)
-        const Artwork = getModel("Artwork");
-
-        const artworks = await Artwork.find().limit(10);
-
+        const artworks = await artworkController.searchArtworks(request)
         return NextResponse.json({ artworks });
     } catch (error) {
-        return new NextResponse("Internal Error", { status: 500, error: error.message });
+        console.log("🚀 ~ file: route.js:27 ~ GET ~ error:", error.message)
+        return new NextResponse("Internal Error", { status: error.status || 500, error: error.message });
     }
 }

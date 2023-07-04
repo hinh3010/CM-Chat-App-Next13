@@ -78,7 +78,6 @@ const createConnectDB = (uri, dbName) => {
             `[MongoDb::: ] Failed to connect ${this.name}.db!! ${err.message}`
         );
     });
-    SimpleLogger.info('MongoDB connected');
     return mongodb;
 };
 
