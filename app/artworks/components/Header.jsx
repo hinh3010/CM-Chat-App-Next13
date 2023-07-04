@@ -4,24 +4,19 @@ import { useState } from "react";
 import ModalUpload from "./ModalUpload";
 import toaster from "~/helper/toaster";
 import axiosClient from "~/helper/axiosClient";
+import { fakeArtwork } from "../adu";
 
 const Header = () => {
     const [showModal, setShowModal] = useState(false)
 
-    const onChange = async (event) => {
+    const onClick = async (event) => {
         event.preventDefault();
-        const file = event.target.files[0]
-
-        const formData = new FormData();
-        formData.append('file', file);
 
         try {
-            const { fileUrl } = await axiosClient.post('/api/uploads', formData, {
-                headers: {
-                    'content-type': 'multipart/form-data'
-                }
+            const response = await axiosClient.post('/api/artworks', {
+                ...fakeArtwork, layers: JSON.stringify(fakeArtwork.layers)
             });
-            console.log({ fileUrl });
+            console.log({ response });
         } catch (error) {
             console.log({ error });
             toaster.error(error.message, { className: 'text-3xl shadow' })
@@ -33,6 +28,7 @@ const Header = () => {
             <div className="w-full h-24 flex items-center justify-between px-8 bg-white rounded-b-2xl">
                 <span
                     className="text-3xl font-medium cursor-pointer"
+                    onClick={onClick}
                 >
                     Artworks Library
                 </span>
@@ -43,7 +39,6 @@ const Header = () => {
                 >
                     Upload Artwork
                 </button>
-                <input type="file" onChange={onChange} />
             </div>
             {
                 showModal &&

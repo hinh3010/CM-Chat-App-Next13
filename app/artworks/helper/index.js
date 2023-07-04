@@ -32,10 +32,10 @@ export async function fetchBlob(url) {
 
 /**
  * @param {string} staticFile
- * @param {URL|string} url
+ * @param {URL|string} targetUrl
  * @returns {Promise<{url: string|null, error: string|null}>}
  */
-export const uploadBinary = async (staticFile, url) => {
+export const uploadBinary = async (staticFile, targetUrl) => {
     try {
         const blob = await fetchBlob(staticFile);
         if (!blob) return { url: null, error: "Static file not found" };
@@ -52,16 +52,36 @@ export const uploadBinary = async (staticFile, url) => {
         });
 
         const buffer = fileReader.result;
-        const response = await axios.put(url, buffer, {
+        const response = await axios.put(targetUrl, buffer, {
             headers: {
                 "Content-Type": "image/png",
             },
         });
-        return { data: response.config.url?.split("?")[0], error: null };
+        return { data: response, error: null };
     } catch (error) {
         return { data: null, error: error.message };
     }
 };
+
+/**
+ * @param {string} staticFile
+ * @param {URL|string} url
+ * @returns {Promise<{url: string|null, error: string|null}>}
+ */
+export const uploadBlob = async (staticFile) => {
+    try {
+        const blob = await fetchBlob(staticFile);
+        const response = await axios.put('/upload', blob, {
+            headers: {
+                'Content-Type': blob.type
+            }
+        })
+        return { data: response, error: null };
+    } catch (error) {
+        return { data: null, error: error.message };
+    }
+};
+
 
 /**
  *
@@ -212,19 +232,8 @@ export const getArtworkLayers = async (psdLayers) => {
                 };
 
                 if (group && typeof group === "object") {
-                    const {
-                        id = "",
-                        level = 1,
-                        name,
-                        composedOpacity: groupOpacity = 1,
-                    } = group;
-                    artworkLayer.group = {
-                        groupName: name || `Group ${id}`,
-                        level: level || 1,
-                        groupId: id || null,
-                        opacity: groupOpacity,
-                    };
-                    artworkLayer.opacity = composedOpacity / groupOpacity;
+                    artworkLayer.opacity = composedOpacity * group.opacity;
+                    artworkLayer.groupId = group.id;
                 }
 
                 artworkLayers.push(artworkLayer);
@@ -232,9 +241,7 @@ export const getArtworkLayers = async (psdLayers) => {
                 const groupId = layer.layerFrame && layer.layerFrame.id;
 
                 const groupAttr = {
-                    level: group && typeof group === "object" ? group.level++ : 0,
-                    name,
-                    composedOpacity,
+                    opacity: composedOpacity,
                     id: groupId,
                 };
                 const artworkLayerItems = await drawLayers(layer.children, groupAttr);

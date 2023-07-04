@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { createConnect, createConnectDB } from "~/database";
+import { createArtwork } from "~/server/artworks/controllers";
+import { createConnect, createConnectDB } from "~/server/database";
 /**
  * 
  * @param {Request} request 
@@ -7,20 +8,11 @@ import { createConnect, createConnectDB } from "~/database";
  */
 export async function POST(request) {
     try {
-        const data = await request.formData()
-        console.log("🚀 ~ file: route.js:13 ~ POST ~ data:", data.get('file'))
+        const newArtwork = await createArtwork(request)
 
-        // const connect = createConnectDB(process.env.MONGO_URI, 'artworks');
-        // const { getModel } = createConnect(connect)
-        // const Artwork = getModel("Artwork");
-        // const artworks = await Artwork.find().limit(10);
-
-        // const body = await request.json();
-        // console.log("🚀 ~ file: route.js:12 ~ POST ~ body:", body)
-
-        return NextResponse.json({ artworks: 'artworks' });
+        return NextResponse.json({ artwork: newArtwork });
     } catch (error) {
-        console.log("🚀 ~ file: route.js:34 ~ POST ~ error:", error)
+        console.log("🚀 ~ file: route.js:34 ~ POST ~ error:", error.message)
         return new NextResponse("Internal Error", { status: 500, error: error.message });
     }
 }

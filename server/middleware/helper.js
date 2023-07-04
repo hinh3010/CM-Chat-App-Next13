@@ -1,5 +1,5 @@
 const { NextResponse } = require("next/server");
-const { createConnectDB, createConnect } = require("~/database");
+const { createConnectDB, createConnect } = require("~/server/database");
 
 function withConnect(databaseName) {
     try {

@@ -1,16 +1,17 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
+import Bluebird from "bluebird";
 import Image from "next/image";
 import { useEffect, useId, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
 import Modal from "~/app/components/ui/Modal";
 import ProgressBar from "~/app/components/ui/ProgressBar";
+import axiosClient from "~/helper/axiosClient";
 import { images } from "~/public/images";
 import { WORKER_PARSE_ARTWORK, WORKER_PARSE_LAYER_ARTWORK } from "../const";
 import { generateBlob, generateBlobUseOffscreenCanvas, isSupportedOffscreenCanvas, readFileAsArrayBuffer } from "../helper";
 import { createMessage } from "../helper/messaging";
-import { useDispatch } from "react-redux";
-import { artworkDetailActions } from "~/stores/reducers/artworkDetail.reducer";
 
 function ModalUpload({ onCancel, onOk }) {
     const workerRef = useRef(null)
@@ -45,7 +46,7 @@ function ModalUpload({ onCancel, onOk }) {
     }
 
     const uploadFile = async (file) => {
-        setPending(true)
+        // setPending(true)
         readFileAsArrayBuffer(file).then((buffer) => {
             workerRef.current?.postMessage(createMessage(WORKER_PARSE_ARTWORK, buffer), [buffer]);
         })
@@ -59,28 +60,46 @@ function ModalUpload({ onCancel, onOk }) {
 
             const createBlob = isSupportedOffscreenCanvas() ? generateBlobUseOffscreenCanvas : generateBlob
 
-            const artworkPayloads = [...value]
+            const artworkData = [...value]
 
-            for (const [idx, layer] of artworkPayloads.entries()) {
+            console.time('Make blob of artwork')
+            for (const [idx, layer] of artworkData.entries()) {
                 const blob = await createBlob({
                     width: layer.width,
                     height: layer.height,
                     composite: layer.image,
                 })
 
-                const imageURL = URL.createObjectURL(blob)
-                layer.image = imageURL
+                // const imageURL = URL.createObjectURL(blob)
+                layer.image = blob
 
                 if (idx === 0) {
                     layer.name = file.name
                 }
             }
+            console.timeEnd('Make blob of artwork')
 
-            dispatch(artworkDetailActions.createArtworkTemplates({
-                artworkContainer: artworkPayloads[0],
-                artworkLayers: artworkPayloads.splice(1, artworkPayloads.length - 1)
-            }))
+            console.time('Upload artwork')
+            const artworkPayloads = await Bluebird.map(artworkData, async (artwork) => {
+                const formData = new FormData();
+                formData.append('file', artwork.image);
 
+                const { fileUrl } = await axiosClient.post('/api/uploads', formData, {
+                    headers: {
+                        'content-type': 'multipart/form-data'
+                    }
+                });
+                return {
+                    ...artwork,
+                    image: fileUrl
+                }
+            }, { concurrency: 10 })
+
+            console.log({
+                ...artworkPayloads[0],
+                layers: JSON.stringify(artworkPayloads.splice(1, artworkPayloads.length - 1))
+            })
+            console.timeEnd('Upload artwork')
             setPending(false)
         }
     }
