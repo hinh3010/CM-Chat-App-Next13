@@ -1,15 +1,16 @@
 "use client";
 
+import moment from "moment";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
-import { images } from "~/public/images";
 
 function Card(props) {
     const { artwork } = props;
     const [loading, setLoading] = React.useState(true);
 
     return (
-        <div className="w-full min-h-full flex items-center justify-center">
+        <Link prefetch href={`/artworks/${artwork._id}`} className="w-full min-h-full flex items-center justify-center">
             <div className="w-full h-auto overflow-hidden shadow-lg flex items-start justify-start flex-col border dark:border-gray-800 rounded-lg">
                 <div
                     style={{ background: '#DEE2E6' }}
@@ -27,11 +28,14 @@ function Card(props) {
                     >
                         <Image
                             alt="Forest"
-                            src={images.budgie || "https://source.unsplash.com/1200x630/?forest"}
+                            src={artwork.image}
                             className={`
                                 artwork-image w-auto h-full
                                 ${loading ? "opacity-0" : "opacity-100"}
                             `}
+                            width={800}
+                            height={600}
+
                             onLoad={() => {
                                 setLoading(false);
                             }}
@@ -46,13 +50,20 @@ function Card(props) {
                         {artwork.name}
                     </span>
                     <p className="py-1 text-xl line-clamp-3">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sed
-                        est viverra ex tincidunt vehicula. Donec pellentesque diam sit
-                        amet mi ullamcorper, ac finibus lorem scelerisque.
+                        Width: <b className="text-orange-700">{artwork.width}</b>
+                        {" "}
+                        Height:<b className="text-orange-700"> {artwork.height}</b>
+                    </p>
+                    <p className="py-1 text-xl line-clamp-3">
+                        Type: <b className="text-orange-700">{artwork.mimetype}</b>
+                        {" "}
+                        Layers:<b className="text-orange-700"> {artwork.totalLayers}</b>
+                        {" "}
+                        Created:<b className="text-orange-700"> {moment(artwork.created_at).fromNow()}</b>
                     </p>
                 </div>
             </div>
-        </div>
+        </Link>
     );
 }
 

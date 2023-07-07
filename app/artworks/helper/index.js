@@ -329,3 +329,103 @@ export const getArtworkLayers2 = async (psdLayers) => {
     const artworkLayers = await drawLayers(psdLayers);
     return artworkLayers;
 };
+
+
+
+/**
+ * calculate the ratio by size of the components and object resized accordingly
+ * @param {object} targetSize
+ * @param {number} targetSize.width
+ * @param {number} targetSize.height
+ * @param {object} currentSize
+ * @param {number} currentSize.width
+ * @param {number} currentSize.height
+ * @param {object|undefined} options
+ * @param {number} options.distance
+ * @returns
+ */
+export const calcRatio = (targetSize, currentSize, options) => {
+    const { distance = 0 } = options || {}
+    const widthRatio = (targetSize.width - distance) / currentSize.width
+    const heightRatio = (targetSize.height - distance) / currentSize.height
+    return Math.min(widthRatio, heightRatio)
+}
+
+/**
+ *
+ * @param {Object} dataArtwork
+ * @param {Object} container
+ * @param {number} container.offsetWidth
+ * @param {number} container.offsetHeight
+ * @returns
+ */
+export const transformArtworkData = (dataArtwork, container) => {
+    const { width, height, name, image, layers, type } = dataArtwork
+
+    const { offsetWidth, offsetHeight } = container
+
+    const distance = 100
+    const ratio = calcRatio(
+        { width: offsetWidth, height: offsetHeight },
+        { width, height },
+        { distance: distance }
+    )
+
+    const centerXEditor = offsetWidth / 2
+    const centerYEditor = offsetHeight / 2
+
+    const centerBgWidth = width / 2
+    const centerBgHeight = height / 2
+
+    const bgX = centerXEditor / ratio - centerBgWidth
+    const bgY = centerYEditor / ratio - centerBgHeight
+
+    const artworkLayers = (JSON.parse(layers)).map((layer) => {
+        const {
+            x: layerX,
+            y: layerY,
+            width: layerWidth,
+            height: layerHeight,
+            image: imageLayer,
+            fontSize,
+            metadata = {},
+            ...rest
+        } = layer
+        const centerWidth = layerWidth / 2
+        const centerHeight = layerHeight / 2
+
+        const newLayer = {
+            ...rest,
+            fontSize: Number(fontSize) || 24 / ratio,
+            ratio: ratio,
+            src: imageLayer,
+            width: layerWidth,
+            height: layerHeight,
+            x: bgX + layerX + centerWidth,
+            y: bgY + layerY + centerHeight,
+            offsetX: centerWidth,
+            offsetY: centerHeight,
+            modified: false,
+            rotation: Number(metadata.rotation) || 0,
+        }
+        return newLayer
+    })
+
+    const transformedArtwork = {
+        artworkContainer: {
+            width: width,
+            height: height,
+            name: name,
+            src: image,
+            type,
+            x: bgX,
+            y: bgY,
+            offsetX: centerBgWidth,
+            offsetY: centerBgHeight,
+        },
+        artworkLayers,
+        ratio,
+    }
+
+    return transformedArtwork
+}

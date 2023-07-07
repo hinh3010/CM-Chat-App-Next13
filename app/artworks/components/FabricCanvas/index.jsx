@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { artworkDetailSelector } from "~/stores/reducers/artworkDetail.reducer";
 
-export default function Canvas() {
+export default function FabricCanvas() {
     const canvasRef = useRef(null);
     const editor = useRef(null);
     const { editorContainer } = useSelector(artworkDetailSelector);

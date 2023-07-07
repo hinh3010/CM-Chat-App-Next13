@@ -1,7 +1,5 @@
-'use client'
-
+"use client";
 import Card from "@/artworks/components/Card";
-
 
 //  [...Array(10).keys()]
 const array = Array.from({ length: 10 }, (_, index) => ({
@@ -13,18 +11,18 @@ const array = Array.from({ length: 10 }, (_, index) => ({
     _id: index,
 }))
 
-const ListArtworks = () => {
+const ListArtworks = ({ artworks }) => {
     return (
         <ul className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {
-                array.map(item => (
+                artworks.map(artwork => (
                     <li
-                        key={item._id}
+                        key={artwork._id}
                         className="
                             p-2 rounded-lg border cursor-pointer m-4 col-span-1 bg-white
                         "
                     >
-                        <Card artwork={item} />
+                        <Card artwork={artwork} />
                     </li>
                 ))
             }

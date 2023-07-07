@@ -26,7 +26,6 @@ const ListLayers = () => {
             <ul className="flex-1">
                 {
                     artworkLayers.map(layer => (
-                        // [...Array(10).keys()].map((layer = {}) => (
                         <li
                             key={layer._id}
                             style={{ background: '#F8F9FA' }}
@@ -42,7 +41,7 @@ const ListLayers = () => {
                                 className="object-cover rounded-lg w-[40px] h-[40px] shadow-md bg-white"
                                 width={40}
                                 height={40}
-                                src={!layer.text ? layer.image : images.logoTextLayer}
+                                src={!layer.text ? layer.src : images.logoTextLayer}
                                 alt=""
                                 onLoad={() => {
                                     // setLoading(false);

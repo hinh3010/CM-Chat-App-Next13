@@ -8,6 +8,7 @@ const editorContainer = createAction(`${reduxConstant.artworkDetail}/editor-cont
 
 const initialState = {
     artworkLayers: [],
+    ratio: 1,
     artworkContainer: {
         width: 0,
         height: 0,
@@ -19,12 +20,8 @@ const initialState = {
     editorContainer: {
         width: 0,
         height: 0,
-        scaleX: 1,
-        scaleY: 1,
-        x: 0,
-        y: 0,
         ref: null
-    },
+    }
 }
 
 const artworkDetailReducer = createReducer(
@@ -37,6 +34,7 @@ const artworkDetailReducer = createReducer(
             .addCase(createArtworkTemplates, (state, { payload }) => {
                 state.artworkLayers = payload.artworkLayers
                 state.artworkContainer = payload.artworkContainer
+                state.ratio = payload.ratio
             })
             .addCase(selectLayerIds, (state, { payload }) => {
                 state.selectLayerIds = payload

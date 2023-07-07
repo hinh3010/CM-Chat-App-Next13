@@ -1,5 +1,5 @@
 import ArtworkService from "./services";
-import { validateBeforeCreateArtwork } from "./validates";
+import ArtworkValidator from "./validates";
 
 class ArtworkController {
     constructor() {
@@ -7,6 +7,11 @@ class ArtworkController {
          * @private
          */
         this.service = new ArtworkService();
+
+        /**
+        * @private
+        */
+        this.validator = ArtworkValidator
     }
 
     /**
@@ -16,7 +21,7 @@ class ArtworkController {
      */
     async createArtwork(request) {
         const body = await request.json();
-        const vBody = validateBeforeCreateArtwork(body);
+        const vBody = this.validator.validateBeforeCreateArtwork(body);
         return await this.service.createArtwork(vBody);
     }
 
@@ -25,12 +30,20 @@ class ArtworkController {
      * @param {Request} request - The HTTP request.
      * @returns {Promise<Array<object>>} A Promise that resolves to an array of artwork objects.
      */
-    async searchArtworks(request) {
-        const url = new URL(request.url);
-        console.log("🚀 ~ file: controllers.js:30 ~ ArtworkController ~ searchArtworks ~ url:", url)
-        const searchParams = new URLSearchParams(url.search);
-        console.log("🚀 ~ file: controllers.js:31 ~ ArtworkController ~ searchArtworks ~ searchParams:", searchParams)
-        return await this.service.searchArtworks();
+    async searchArtworks() {
+        // const url = new URL(request.url);
+        // const searchParams = new URLSearchParams(url.search);
+        const vPayload = this.validator.validateBeforeSearchArtworks({});
+        return await this.service.searchArtworks(vPayload);
+    }
+
+    /**
+     * Searches for artwork with id.
+     * @param {Request} request - The HTTP request.
+     * @returns {Promise<Array<object>>} A Promise that resolves to an array of artwork objects.
+     */
+    async searchArtworkById(request, id) {
+        return await this.service.searchArtworkById({ id });
     }
 }
 

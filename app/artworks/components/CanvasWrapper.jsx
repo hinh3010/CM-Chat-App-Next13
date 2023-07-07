@@ -1,13 +1,13 @@
 'use client'
 
 import { useEffect, useRef } from "react";
-import { useDispatch } from "react-redux";
-import { artworkDetailActions } from "~/stores/reducers/artworkDetail.reducer";
-import FabricCanvas from "./Canvas";
 import { debounce } from "~/helper";
+import { dispatch } from "~/stores";
+import { artworkDetailActions } from "~/stores/reducers/artworkDetail.reducer";
+import { transformArtworkData } from "../helper";
+import FabricCanvas from "./FabricCanvas";
 
-const CanvasWrapper = () => {
-    const dispatch = useDispatch()
+const CanvasWrapper = ({ dataArtwork }) => {
 
     const editorWrapperRef = useRef()
 
@@ -29,7 +29,17 @@ const CanvasWrapper = () => {
         return () => {
             window.removeEventListener('resize', handleResize)
         }
-    }, [dispatch])
+    }, [])
+
+    useEffect(() => {
+        if (!dataArtwork) return
+        let { offsetWidth, offsetHeight } = editorWrapperRef.current
+        const transformedArtwork = transformArtworkData(dataArtwork, {
+            offsetWidth,
+            offsetHeight,
+        })
+        dispatch(artworkDetailActions.createArtworkTemplates(transformedArtwork))
+    }, [dataArtwork])
 
     return (
         <div className="w-full h-full border flex flex-col bg-white rounded-2xl">
@@ -48,7 +58,6 @@ const CanvasWrapper = () => {
                 }}
                 ref={editorWrapperRef}
             >
-                {/* <FabricJSCanvas className="sample-canvas" onReady={onReady} /> */}
                 <FabricCanvas />
             </div >
             <div className="w-full h-20">

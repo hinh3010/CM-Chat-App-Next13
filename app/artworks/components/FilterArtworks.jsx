@@ -1,7 +1,4 @@
-'use client'
-
 import InputSearch from "~/app/components/ui/InputSearch";
-
 
 const FilterArtworks = () => {
     return (

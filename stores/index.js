@@ -9,4 +9,6 @@ const store = configureStore({
 export default store
 
 export const dispatch = store.dispatch
-export const getState = store.getState
+export const getState = (selector) => {
+    return store.getState()[selector]
+}

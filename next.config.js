@@ -2,11 +2,11 @@
 const nextConfig = {
     images: {
         domains: [
+            "res.cloudinary.com",
             "localhost",
             "source.unsplash.com",
             "*",
-            "d5xh8as6wnpix.cloudfront.net",
-            "res.cloudinary.com"
+            "d5xh8as6wnpix.cloudfront.net"
         ],
     },
     webpack: (config) => {

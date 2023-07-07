@@ -24,7 +24,7 @@ const Header = () => {
     }
 
     return (
-        <>
+        <header>
             <div className="w-full h-24 flex items-center justify-between px-8 bg-white rounded-b-2xl">
                 <span
                     className="text-3xl font-medium cursor-pointer"
@@ -46,7 +46,7 @@ const Header = () => {
                     onCancel={() => setShowModal(false)}
                     onOk={() => setShowModal(false)} />
             }
-        </>
+        </header>
     );
 }
 
