@@ -5,4 +5,5 @@ export const images = {
     budgie: require('./budgie.png'),
     logoTextLayer: require('./text-thumb.png'),
     uploadIcon: require('./upload-icon.png'),
+    backgroundTransparent: require('./bg-transparent.png')
 }

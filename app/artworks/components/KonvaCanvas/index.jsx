@@ -1,12 +1,12 @@
-import { useRef } from 'react'
-import { Stage } from 'react-konva'
-import Layers from './Layers'
+import { useEffect, useRef, useState } from 'react';
+import { Stage } from 'react-konva';
 import { useSelector } from 'react-redux';
 import { artworkDetailSelector } from '~/stores/reducers/artworkDetail.reducer';
+import Layers from './Layers';
 
-export default function KonvaCanvas() {
+export default function KonvaCanvas({ editorContainer }) {
 
-    const { ratio, editorContainer, draggable, artworkLayers, artworkContainer } = useSelector(artworkDetailSelector);
+    const { ratio, artworkLayers, artworkContainer } = useSelector(artworkDetailSelector);
 
     const stageRef = useRef(null)
 
@@ -15,6 +15,9 @@ export default function KonvaCanvas() {
     * @param {MouseEvent} e - The mouse event
     */
     const onZoom = (e) => {
+        /**
+         * @type {import('konva/lib/Stage'.Stage)}
+         */
         const stage = stageRef.current
         // Get the amount of wheel movement
         const { deltaY } = e.evt
@@ -39,10 +42,55 @@ export default function KonvaCanvas() {
         stage.batchDraw()
     }
 
+    const [draggable, setDraggable] = useState(false)
+
+    useEffect(() => {
+        /**
+          * @type {import('konva/lib/Stage'.Stage)}
+          */
+        const stage = stageRef.current
+        if (!stage) return
+
+        const handleKeyDown = (event) => {
+            const { keyCode } = event || {}
+
+            if (keyCode === 32 /* space */) {
+                setDraggable(true)
+            }
+        }
+        const handleKeyUp = (event) => {
+            const { keyCode } = event || {}
+            if (keyCode === 32 /* space */) {
+                setDraggable(false)
+            }
+        }
+
+        const handleWheel = (event) => {
+            if (event.ctrlKey) {
+                event.preventDefault()
+            }
+        }
+
+        const handleResize = (event) => {
+            event.preventDefault()
+        }
+
+        window.addEventListener('keydown', handleKeyDown)
+        window.addEventListener('keyup', handleKeyUp)
+        window.addEventListener('resize', handleResize)
+        window.addEventListener('wheel', handleWheel, { passive: false })
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown)
+            window.removeEventListener('keyup', handleKeyUp)
+            window.removeEventListener('resize', handleResize)
+            window.removeEventListener('wheel', handleWheel)
+        }
+    }, [])
+
     return (
         <Stage
             ref={stageRef}
-            // onClick={onDeAttach}
             width={editorContainer.width}
             height={editorContainer.height}
             scaleX={ratio}
@@ -51,9 +99,10 @@ export default function KonvaCanvas() {
             onWheel={onZoom}
             style={{ cursor: draggable ? 'grabbing' : 'pointer' }}
         >
-            {!!artworkLayers.length && artworkContainer && (
+            {!!artworkLayers.length && !!artworkContainer && (
                 <Layers
-                    layers={artworkLayers}
+                    artworkLayers={artworkLayers}
+                    artworkContainer={artworkContainer}
                     draggable={draggable}
                 />
             )}

@@ -352,6 +352,37 @@ export const calcRatio = (targetSize, currentSize, options) => {
 }
 
 /**
+ * 
+ * @param {URL} image 
+ * @param {number} retryCount 
+ * @returns 
+ */
+export const loadImage = (image, retryCount = 0) => {
+    return new Promise((resolve, reject) => {
+        const img = new window.Image()
+        img.crossOrigin = 'Anonymous'
+        img.onload = () => {
+            const timer = setTimeout(() => {
+                clearTimeout(timer)
+                resolve(img)
+            }, 1000)
+        }
+        img.onerror = () => {
+            if (retryCount < 3) {
+                setTimeout(() => {
+                    loadImage(image, retryCount + 1)
+                        .then(resolve)
+                        .catch(reject)
+                }, 1000)
+            } else {
+                reject(new Error('Error loading image'))
+            }
+        }
+        img.src = image
+    })
+}
+
+/**
  *
  * @param {Object} dataArtwork
  * @param {Object} container
@@ -360,7 +391,7 @@ export const calcRatio = (targetSize, currentSize, options) => {
  * @returns
  */
 export const transformArtworkData = (dataArtwork, container) => {
-    const { width, height, name, image, layers, type } = dataArtwork
+    const { width, height, name, layers } = dataArtwork
 
     const { offsetWidth, offsetHeight } = container
 
@@ -401,6 +432,8 @@ export const transformArtworkData = (dataArtwork, container) => {
             src: imageLayer,
             width: layerWidth,
             height: layerHeight,
+            scaleX: 1,
+            scaleY: 1,
             x: bgX + layerX + centerWidth,
             y: bgY + layerY + centerHeight,
             offsetX: centerWidth,
@@ -416,12 +449,8 @@ export const transformArtworkData = (dataArtwork, container) => {
             width: width,
             height: height,
             name: name,
-            src: image,
-            type,
             x: bgX,
-            y: bgY,
-            offsetX: centerBgWidth,
-            offsetY: centerBgHeight,
+            y: bgY
         },
         artworkLayers,
         ratio,

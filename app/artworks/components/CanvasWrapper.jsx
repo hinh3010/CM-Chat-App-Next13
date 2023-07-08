@@ -1,21 +1,26 @@
 'use client'
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { debounce } from "~/helper";
 import { dispatch } from "~/stores";
 import { artworkDetailActions } from "~/stores/reducers/artworkDetail.reducer";
 import { transformArtworkData } from "../helper";
-import FabricCanvas from "./FabricCanvas";
+import KonvaCanvas from "./KonvaCanvas";
 
 const CanvasWrapper = ({ dataArtwork }) => {
 
     const editorWrapperRef = useRef()
+    const [editorContainer, setEditorContainer] = useState({
+        width: 0,
+        height: 0
+    })
 
     useEffect(() => {
         const handleResize = debounce(() => {
             if (editorWrapperRef.current) {
                 let { offsetWidth, offsetHeight } = editorWrapperRef.current
-                dispatch(artworkDetailActions.editorContainer({
+                setEditorContainer(prev => ({
+                    ...prev,
                     width: offsetWidth,
                     height: offsetHeight
                 }))
@@ -33,13 +38,12 @@ const CanvasWrapper = ({ dataArtwork }) => {
 
     useEffect(() => {
         if (!dataArtwork) return
-        let { offsetWidth, offsetHeight } = editorWrapperRef.current
         const transformedArtwork = transformArtworkData(dataArtwork, {
-            offsetWidth,
-            offsetHeight,
+            offsetWidth: editorContainer.width,
+            offsetHeight: editorContainer.height,
         })
         dispatch(artworkDetailActions.createArtworkTemplates(transformedArtwork))
-    }, [dataArtwork])
+    }, [dataArtwork, editorContainer.width, editorContainer.height])
 
     return (
         <div className="w-full h-full border flex flex-col bg-white rounded-2xl">
@@ -47,18 +51,18 @@ const CanvasWrapper = ({ dataArtwork }) => {
 
             </div>
             <div
-                className="flex-1"
+                className="flex-1  bg-gray-50"
                 style={{
-                    background: `
-                        linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white),
-                        linear-gradient(45deg, white 25%, rgb(218, 218, 218) 25%, rgb(218, 218, 218) 75%, white 75%, white)
-                    `,
-                    backgroundSize: '20px 20px',
-                    backgroundPosition: '0 0, 10px 10px'
+                    // background: `
+                    //     linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white),
+                    //     linear-gradient(45deg, white 25%, rgb(218, 218, 218) 25%, rgb(218, 218, 218) 75%, white 75%, white)
+                    // `,
+                    // backgroundSize: '20px 20px',
+                    // backgroundPosition: '0 0, 10px 10px'
                 }}
                 ref={editorWrapperRef}
             >
-                <FabricCanvas />
+                <KonvaCanvas editorContainer={editorContainer} />
             </div >
             <div className="w-full h-20">
 
