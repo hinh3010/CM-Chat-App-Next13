@@ -1,9 +1,10 @@
 'use client'
+import Link from "next/link";
 import Avatar from "./ui/Avatar";
 
 const Header = () => {
     return (
-        <div className="h-28 w-full flex items-center justify-between px-10 shadow-2xl">
+        <Link prefetch href={`/artworks`} className="h-28 w-full flex items-center justify-between px-10 shadow-2xl">
             <section className="flex items-center">
                 <Avatar src={"https://source.unsplash.com/256x256"} />
                 <div
@@ -39,7 +40,7 @@ const Header = () => {
                 <span className="mx-2 h-20" style={{ width: '2px', backgroundColor: '#B4B4B4' }}></span>
                 <Avatar className="mx-2" src={"https://source.unsplash.com/256x256"} />
             </section>
-        </div>
+        </Link>
     );
 }
 

@@ -1,7 +1,5 @@
 "use client";
 
-import "./inputSearch.scss";
-
 function InputSearch({ className, ...rest }) {
     return (
         <form className={"flex items-center " + className} {...rest}>
