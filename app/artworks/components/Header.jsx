@@ -5,6 +5,7 @@ import ModalUpload from "./ModalUpload";
 import toaster from "~/helper/toaster";
 import axiosClient from "~/helper/axiosClient";
 import { fakeArtwork } from "../adu";
+import Link from "next/link";
 
 const Header = () => {
     const [showModal, setShowModal] = useState(false)
@@ -26,12 +27,13 @@ const Header = () => {
     return (
         <header>
             <div className="w-full h-24 flex items-center justify-between px-8 bg-white rounded-b-2xl">
-                <span
+                <Link
+                    href={'/artworks'}
                     className="text-3xl font-medium cursor-pointer"
-                    onClick={onClick}
+                // onClick={onClick}
                 >
                     Artworks Library
-                </span>
+                </Link>
                 <button
                     onClick={() => setShowModal(true)}
                     className="text-xl font-medium bg-blue-700 text-white rounded-lg cursor-pointer px-6 py-4"

@@ -1,8 +1,8 @@
 import React from "react";
 
-export default function Input() {
+export default function Input({ className }) {
     return (
-        <div className="relative w-full h-[40px]">
+        <div className={"relative w-full h-[34px] " + className}>
             <input
                 type="text"
                 className="bg-gray-50 border h-full border-gray-300 text-gray-900 text-2xl rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-12 pl-3  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"

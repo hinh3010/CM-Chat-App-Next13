@@ -73,3 +73,18 @@
   visibility: visible;
   opacity: 1;
 }
+
+.scrollbar-container {
+  min-height: 100%;
+  max-height: calc(100vh - 80px);
+  padding-bottom: 20px;
+  overflow-y: overlay;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  // &:hover::-webkit-scrollbar {
+  //   display: block;
+  // }
+}

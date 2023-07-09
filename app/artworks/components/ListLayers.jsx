@@ -17,7 +17,7 @@ const ListLayers = () => {
     }
 
     return (
-        <div className="w-full h-full border rounded-2xl p-4 flex flex-col bg-white">
+        <div className="w-full scrollbar-container border rounded-2xl p-4 flex flex-col bg-white">
             <span
                 className="text-3xl font-medium cursor-pointer text-center py-4"
             >

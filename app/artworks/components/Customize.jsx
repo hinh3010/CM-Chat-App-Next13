@@ -2,6 +2,8 @@
 
 import ButtonGroup from "./ButtonGroup";
 import { Icons } from "~/app/components/icon";
+import Select from "./Select";
+import Input from "./Input";
 
 const horizontals = [
     {
@@ -113,7 +115,7 @@ const Customize = () => {
     }
 
     return (
-        <div className="w-full h-full border rounded-2xl p-4 flex flex-col bg-white overflow-hidden">
+        <div className="w-full scrollbar-container border rounded-2xl p-4 flex flex-col bg-white overflow-hidden">
             <section className="flex items-end justify-between py-4">
                 <span
                     className="text-3xl font-medium cursor-pointer"
@@ -223,7 +225,7 @@ const Customize = () => {
                 <span
                     className="text-2xl font-medium cursor-pointer"
                 >
-                    Position
+                    Alignment
                 </span>
                 <div className="flex items-center w-full mt-2">
                     <ButtonGroup buttons={horizontals} className={'flex-1 mx-2'} />
@@ -241,6 +243,54 @@ const Customize = () => {
                 </div>
                 <div className="flex items-center w-full mt-4">
                     <ButtonGroup buttons={textAlignments} className={'flex-1 mx-2'} onClick={handleClick} />
+                </div>
+            </section>
+            <section className="flex flex-col mt-6">
+                <span
+                    className="text-2xl font-medium cursor-pointer"
+                >
+                    Font
+                </span>
+                <div className="flex items-center w-full mt-2">
+                    <Select />
+                </div>
+            </section>
+            <section className="flex flex-col mt-6">
+                <span
+                    className="text-2xl font-medium cursor-pointer"
+                >
+                    Position
+                </span>
+                <div className="flex items-center w-full mt-2">
+                    <Input className={'flex-1 mx-2'} />
+                    <Input className={'flex-1 mx-2'} />
+                </div>
+                <div className="flex items-center w-full mt-2">
+                    <Input className={'flex-1 mx-2'} />
+                    <Input className={'flex-1 mx-2'} />
+                </div>
+                <div className="flex items-center w-full mt-2">
+                    <Input className={'flex-1 mx-2'} />
+                    <Input className={'flex-1 mx-2'} />
+                </div>
+            </section>
+            <section className="flex flex-col mt-6">
+                <span
+                    className="text-2xl font-medium cursor-pointer"
+                >
+                    Position
+                </span>
+                <div className="flex items-center w-full mt-2">
+                    <Input className={'flex-1 mx-2'} />
+                    <Input className={'flex-1 mx-2'} />
+                </div>
+                <div className="flex items-center w-full mt-2">
+                    <Input className={'flex-1 mx-2'} />
+                    <Input className={'flex-1 mx-2'} />
+                </div>
+                <div className="flex items-center w-full mt-2">
+                    <Input className={'flex-1 mx-2'} />
+                    <Input className={'flex-1 mx-2'} />
                 </div>
             </section>
         </div>

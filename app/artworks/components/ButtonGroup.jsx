@@ -13,7 +13,7 @@ export default function ButtonGroup({
 
     return (
         <div
-            className={"flex rounded-md shadow-sm " + className}
+            className={"flex h-[34px] rounded-md shadow-sm " + className}
             role="group"
             {...rest}
         >
@@ -28,7 +28,7 @@ export default function ButtonGroup({
                             hover:bg-gray-100 hover:text-blue-700 
                             dark:hover:text-white dark:hover:bg-gray-600  
                             border 
-                            w-full flex items-center justify-center h-[34px]
+                            w-full flex items-center justify-center h-full
                             ${index === lastIndex
                             ? "rounded-r-lg"
                             : index === 0

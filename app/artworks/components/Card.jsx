@@ -10,7 +10,7 @@ function Card(props) {
     const [loading, setLoading] = React.useState(true);
 
     return (
-        <Link prefetch href={`/artworks/${artwork._id}`} className="w-full min-h-full flex items-center justify-center">
+        <Link prefetch href={`artworks/${artwork._id}`} className="w-full min-h-full flex items-center justify-center">
             <div className="w-full h-auto overflow-hidden shadow-lg flex items-start justify-start flex-col border dark:border-gray-800 rounded-lg">
                 <div
                     style={{ background: '#DEE2E6' }}
