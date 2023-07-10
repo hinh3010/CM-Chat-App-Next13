@@ -1,5 +1,7 @@
 import { Inter } from "next/font/google";
 import Sidebar2 from "../components/Sidebar2";
+import "./styles.scss";
+import PyodideExample from "./adu";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -45,6 +47,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
     return (
         <html lang="en" className="h-full scroll-smooth antialiased">
+            <head>
+                <script src="https://cdn.jsdelivr.net/pyodide/v0.18.1/full/pyodide.js"></script>
+            </head>
             <body
                 className={inter.className + ' ' + 'shadow-2xl'}
                 style={{
@@ -60,7 +65,8 @@ export default function RootLayout({ children }) {
                         <Sidebar2 />
                     </section>
                     <section className="flex-1">
-                        {children}
+                        <PyodideExample />
+                        {/* {children} */}
                     </section>
                 </div>
             </body>
