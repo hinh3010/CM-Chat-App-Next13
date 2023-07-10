@@ -6,6 +6,7 @@ import CanvasWrapper from "../components/CanvasWrapper";
 import Customize from "../components/Customize";
 import ListLayers from "../components/ListLayers";
 import Loading from "../components/Loading";
+import ListLayersShimmer from "../components/ListLayersShimmer";
 
 function PageDetail({ params }) {
     const [dataArtwork, setDataArtwork] = useState(null)
@@ -44,7 +45,10 @@ function PageDetail({ params }) {
             <section
                 className="w-full h-full col-span-1 p-2"
             >
-                <ListLayers />
+                {true
+                    ? <ListLayersShimmer />
+                    : <ListLayers />
+                }
             </section>
             <section
                 className="w-full h-full col-span-2 p-2"
