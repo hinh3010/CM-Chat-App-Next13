@@ -47,9 +47,6 @@ export const metadata = {
 export default function RootLayout({ children }) {
     return (
         <html lang="en" className="h-full scroll-smooth antialiased">
-            <head>
-                <script src="https://cdn.jsdelivr.net/pyodide/v0.18.1/full/pyodide.js"></script>
-            </head>
             <body
                 className={inter.className + ' ' + 'shadow-2xl'}
                 style={{
@@ -65,8 +62,7 @@ export default function RootLayout({ children }) {
                         <Sidebar2 />
                     </section>
                     <section className="flex-1">
-                        <PyodideExample />
-                        {/* {children} */}
+                        {children}
                     </section>
                 </div>
             </body>

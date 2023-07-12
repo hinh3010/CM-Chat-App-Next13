@@ -2906,13 +2906,14 @@ punycode@^2.1.0, punycode@^2.1.1:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.3.0.tgz#f67fa67c94da8f4d0cfff981aee4118064199b8f"
   integrity sha512-rRV+zQD8tVFys26lAGR9WUuS4iUAngJScM+ZRSKtvl5tKeZ2t5bvdNFdNHBW9FWR4guGHlgmsZ1G7BSm2wTbuA==
 
-pyodide@0.18.1:
-  version "0.18.1"
-  resolved "https://registry.yarnpkg.com/pyodide/-/pyodide-0.18.1.tgz#9b987de7dc30de261aeabea64052bb7ab3f1fef7"
-  integrity sha512-QgkdYXu0nkWoJ5Ein2GAgpsT6gfuRCdmiR5C3JSTUEyHnMY0MqU0hx7hpD0/ZVXNSalG7ytVQ+9SgCL2RtVcqg==
+pyodide@^0.23.4:
+  version "0.23.4"
+  resolved "https://registry.yarnpkg.com/pyodide/-/pyodide-0.23.4.tgz#99b9a31e5e0238d90329cf4a5b2e4b532cba1026"
+  integrity sha512-WpQUHaIXQ1xede5BMqPAjBcmopxN22s5hEsYOR8T7/UW/fkNLFUn07SaemUgthbtvedD5JGymMMj4VpD9sGMTg==
   dependencies:
     base-64 "^1.0.0"
     node-fetch "^2.6.1"
+    ws "^8.5.0"
 
 q@^1.5.1:
   version "1.5.1"
@@ -3776,7 +3777,7 @@ wrappy@1:
   resolved "https://registry.yarnpkg.com/wrappy/-/wrappy-1.0.2.tgz#b5243d8f3ec1aa35f1364605bc0d1036e30ab69f"
   integrity sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==
 
-ws@^8.2.3:
+ws@^8.2.3, ws@^8.5.0:
   version "8.13.0"
   resolved "https://registry.yarnpkg.com/ws/-/ws-8.13.0.tgz#9a9fb92f93cf41512a0735c8f4dd09b8a1211cd0"
   integrity sha512-x9vcZYTrFPC7aSIbj7sRCYo7L/Xb8Iy+pW0ng0wt2vCJv7M9HOMy0UoN3rr+IFC7hb7vXoqS+P9ktyLLLhO+LA==
