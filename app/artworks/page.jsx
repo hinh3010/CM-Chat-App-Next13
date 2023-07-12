@@ -37,8 +37,8 @@ export default function Page() {
             <FilterArtworks />
             {
                 loading
-                    ? <ListArtworks artworks={artworks} />
-                    : <ListArtworksSimmer />
+                    ? <ListArtworksSimmer />
+                    : <ListArtworks artworks={artworks} />
             }
         </main>
     )

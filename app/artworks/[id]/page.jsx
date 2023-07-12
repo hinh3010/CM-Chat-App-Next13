@@ -45,7 +45,7 @@ function PageDetail({ params }) {
             <section
                 className="w-full h-full col-span-1 p-2"
             >
-                {true
+                {loading
                     ? <ListLayersShimmer />
                     : <ListLayers />
                 }
