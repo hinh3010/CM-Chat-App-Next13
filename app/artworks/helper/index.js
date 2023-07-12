@@ -395,21 +395,15 @@ export const transformArtworkData = (dataArtwork, container) => {
 
     const { offsetWidth, offsetHeight } = container
 
-    const distance = 100
+    const distance = 50
     const ratio = calcRatio(
         { width: offsetWidth, height: offsetHeight },
         { width, height },
         { distance: distance }
     )
 
-    const centerXEditor = offsetWidth / 2
-    const centerYEditor = offsetHeight / 2
-
-    const centerBgWidth = width / 2
-    const centerBgHeight = height / 2
-
-    const bgX = centerXEditor / ratio - centerBgWidth
-    const bgY = centerYEditor / ratio - centerBgHeight
+    const bgX = offsetWidth / 2 / ratio - width / 2
+    const bgY = offsetHeight / 2 / ratio - height / 2
 
     const artworkLayers = (JSON.parse(layers)).map((layer) => {
         const {
@@ -428,14 +422,13 @@ export const transformArtworkData = (dataArtwork, container) => {
         const newLayer = {
             ...rest,
             fontSize: Number(fontSize) || 24 / ratio,
-            ratio: ratio,
             src: imageLayer,
             width: layerWidth,
             height: layerHeight,
             scaleX: 1,
             scaleY: 1,
-            x: bgX + layerX + centerWidth,
-            y: bgY + layerY + centerHeight,
+            x: layerX + centerWidth,
+            y: layerY + centerHeight,
             offsetX: centerWidth,
             offsetY: centerHeight,
             modified: false,
@@ -453,7 +446,7 @@ export const transformArtworkData = (dataArtwork, container) => {
             y: bgY
         },
         artworkLayers,
-        ratio,
+        ratioDefault: ratio,
     }
 
     return transformedArtwork

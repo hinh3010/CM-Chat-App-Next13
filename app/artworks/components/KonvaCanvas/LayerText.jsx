@@ -5,7 +5,7 @@ import { Text } from 'react-konva'
  * @param {} payload.layers
  * @returns
  */
-const LayerText = ({ layer, onClick }) => {
+const LayerText = ({ layer, onClick, onDragMove }) => {
 
     return (
         <Text
@@ -16,6 +16,8 @@ const LayerText = ({ layer, onClick }) => {
             draggable
             preventDefault={true}
             globalCompositeOperation="source-atop"
+            onDragMove={onDragMove}
+            onDragEnd={onDragMove}
         />
     )
 }

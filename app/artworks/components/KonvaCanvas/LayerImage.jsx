@@ -7,7 +7,7 @@ import useImage from 'use-image'
  * @param {} payload.layers
  * @returns
  */
-const LayerImage = ({ layer, onClick }) => {
+const LayerImage = ({ layer, onClick, onDragMove }) => {
     const [image] = useImage(layer.src, 'anonymous', 'origin')
 
     return (
@@ -21,6 +21,7 @@ const LayerImage = ({ layer, onClick }) => {
             preventDefault={true}
             // cornerRadius={20}
             globalCompositeOperation="source-atop"
+            onDragMove={onDragMove}
         />
     )
 }

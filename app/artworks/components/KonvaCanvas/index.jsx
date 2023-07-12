@@ -6,9 +6,14 @@ import Layers from './Layers';
 
 export default function KonvaCanvas({ editorContainer }) {
 
-    const { ratio, artworkLayers, artworkContainer } = useSelector(artworkDetailSelector);
+    const { ratioDefault, artworkLayers, artworkContainer } = useSelector(artworkDetailSelector);
 
     const stageRef = useRef(null)
+    const [ratio, setRatio] = useState(ratioDefault)
+
+    useEffect(() => {
+        setRatio(ratioDefault)
+    }, [ratioDefault])
 
     /**
     * Zoom in or out based on mouse wheel event
@@ -27,19 +32,21 @@ export default function KonvaCanvas({ editorContainer }) {
 
         const scaleFactor = deltaY < 0 ? 1.1 : 1 / 1.1
 
+        const stageScale = Math.min(stage.scaleX(), stage.scaleY())
+
         // Calculate the new scale
-        const newScaleX = stage.scaleX() * scaleFactor
-        if (newScaleX < ratio || newScaleX > ratio * 10) return
-        const newScaleY = stage.scaleY() * scaleFactor
-        if (newScaleY < ratio || newScaleY > ratio * 10) return
+        const newScale = stageScale * scaleFactor
+        if (newScale < ratioDefault || newScale > ratioDefault * 10) return
 
         // Calculate the new position of the stage based on the current position of the mouse pointer
         const newX = pointer.x - (pointer.x - stage.x()) * scaleFactor
         const newY = pointer.y - (pointer.y - stage.y()) * scaleFactor
 
-        stage.scale({ x: newScaleX, y: newScaleY })
+        stage.scale({ x: newScale, y: newScale })
         stage.position({ x: newX, y: newY })
         stage.batchDraw()
+
+        setRatio(newScale)
     }
 
     const [draggable, setDraggable] = useState(false)
@@ -104,6 +111,7 @@ export default function KonvaCanvas({ editorContainer }) {
                     artworkLayers={artworkLayers}
                     artworkContainer={artworkContainer}
                     draggable={draggable}
+                    ratio={ratioDefault}
                 />
             )}
         </Stage>
