@@ -2,18 +2,19 @@ import { useEffect, useRef, useState } from 'react';
 import { Stage } from 'react-konva';
 import { useSelector } from 'react-redux';
 import { artworkDetailSelector } from '~/stores/reducers/artworkDetail.reducer';
+import { changeStageRef, useArtworkLibrary } from '../../context';
 import Layers from './Layers';
 
 export default function KonvaCanvas({ editorContainer }) {
 
     const { ratioDefault, artworkLayers, artworkContainer } = useSelector(artworkDetailSelector);
+    const { dispatch } = useArtworkLibrary()
 
     const stageRef = useRef(null)
-    const [ratio, setRatio] = useState(ratioDefault)
 
     useEffect(() => {
-        setRatio(ratioDefault)
-    }, [ratioDefault])
+        stageRef.current && dispatch(changeStageRef(stageRef.current))
+    }, [dispatch])
 
     /**
     * Zoom in or out based on mouse wheel event
@@ -45,8 +46,6 @@ export default function KonvaCanvas({ editorContainer }) {
         stage.scale({ x: newScale, y: newScale })
         stage.position({ x: newX, y: newY })
         stage.batchDraw()
-
-        setRatio(newScale)
     }
 
     const [draggable, setDraggable] = useState(false)
@@ -100,18 +99,20 @@ export default function KonvaCanvas({ editorContainer }) {
             ref={stageRef}
             width={editorContainer.width}
             height={editorContainer.height}
-            scaleX={ratio}
-            scaleY={ratio}
             draggable={draggable}
+            scale={{
+                x: ratioDefault,
+                y: ratioDefault
+            }}
             onWheel={onZoom}
             style={{ cursor: draggable ? 'grabbing' : 'pointer' }}
+            id='artwork-konva'
         >
             {!!artworkLayers.length && !!artworkContainer && (
                 <Layers
                     artworkLayers={artworkLayers}
                     artworkContainer={artworkContainer}
                     draggable={draggable}
-                    ratio={ratioDefault}
                 />
             )}
         </Stage>

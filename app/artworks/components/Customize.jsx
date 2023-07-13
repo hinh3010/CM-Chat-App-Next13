@@ -4,6 +4,7 @@ import ButtonGroup from "./ButtonGroup";
 import { Icons } from "~/app/components/icon";
 import Select from "./Select";
 import Input from "./Input";
+import { useArtworkLibrary } from "../context";
 
 const horizontals = [
     {
@@ -109,6 +110,10 @@ const textAlignments = [
 ]
 
 const Customize = () => {
+
+    const { state: { stageRef } } = useArtworkLibrary()
+    // console.log("🚀 ~ file: Customize.jsx:115 ~ Customize ~ stageRef:", stageRef)
+    // console.log({ adu: stageRef.findOne('Transformer') })
 
     function handleClick(item) {
         item.active = true

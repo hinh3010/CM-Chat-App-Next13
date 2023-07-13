@@ -52,14 +52,6 @@ const CanvasWrapper = ({ dataArtwork }) => {
             </div>
             <div
                 className="flex-1  bg-gray-50"
-                style={{
-                    // background: `
-                    //     linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white),
-                    //     linear-gradient(45deg, white 25%, rgb(218, 218, 218) 25%, rgb(218, 218, 218) 75%, white 75%, white)
-                    // `,
-                    // backgroundSize: '20px 20px',
-                    // backgroundPosition: '0 0, 10px 10px'
-                }}
                 ref={editorWrapperRef}
             >
                 <KonvaCanvas editorContainer={editorContainer} />

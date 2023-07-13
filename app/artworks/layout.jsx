@@ -3,6 +3,7 @@ import { Toasters } from "../toater";
 import Header from "./components/Header";
 import './styles.scss';
 import { Providers } from "../provider";
+import { ArtworkLibraryProvider } from "./context";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -60,12 +61,14 @@ export default function RootLayout({ children }) {
                 }}
             >
                 <Providers>
-                    <section className="w-full px-2">
-                        <Header />
-                    </section>
-                    <section className="w-full flex-1 p-2">
-                        {children}
-                    </section>
+                    <ArtworkLibraryProvider>
+                        <section className="w-full px-2">
+                            <Header />
+                        </section>
+                        <section className="w-full flex-1 p-2">
+                            {children}
+                        </section>
+                    </ArtworkLibraryProvider>
                 </Providers>
                 <Toasters />
             </body>

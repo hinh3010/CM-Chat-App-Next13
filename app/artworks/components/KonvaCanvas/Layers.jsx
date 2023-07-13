@@ -9,7 +9,7 @@ import LayerText from './LayerText'
  * @param {} payload.layers
  * @returns
  */
-const Layers = ({ draggable, artworkContainer, artworkLayers, ratio }) => {
+const Layers = ({ draggable, artworkContainer, artworkLayers }) => {
 
     const trRef = useRef()
     const grRef = useRef()
@@ -32,13 +32,6 @@ const Layers = ({ draggable, artworkContainer, artworkLayers, ratio }) => {
 
         // console.log('attr', targetNode.getAttrs())
         // const rect = targetNode.getClientRect({ relativeTo: trNode })
-        // // console.log({ rect })
-        // setRect({
-        //     x: rect.x / ratio,
-        //     y: rect.y / ratio,
-        //     width: rect.width / ratio,
-        //     height: rect.height / ratio,
-        // })
 
         trNode.nodes([targetNode])
         trNode.moveToTop()
@@ -50,37 +43,39 @@ const Layers = ({ draggable, artworkContainer, artworkLayers, ratio }) => {
     */
     const onDragMove = (event) => {
         const targetNode = event.target
-        const trNode = trRef.current
-        if (!targetNode || !trNode) return
+        const grNode = grRef.current
+        if (!targetNode || !grNode) return
 
-        const { x, y, width, height } = targetNode.getClientRect({ relativeTo: trNode })
+        const { x, y, width, height } = targetNode.getClientRect({ relativeTo: grNode })
 
-        const rectX = x / ratio
-        const rectY = y / ratio
-        const rectWidth = width / ratio
-        const rectHeight = height / ratio
+        const rectX = x + width / 2
+        const rectY = y + height / 2
+        const rectWidth = width
+        const rectHeight = height
 
         const { x: bgX, y: bgY, width: bgWidth, height: bgHeight } = artworkContainer
+        console.log({
+            x: rectX, y: rectY, width: rectWidth, height: rectHeight, bgY
+        })
 
         let newX = targetNode.x()
         let newY = targetNode.y()
 
-        if (rectX + rectWidth < bgX) {
-            newX = rectWidth / -2
-        } else if (rectX > bgX + bgWidth) {
-            newX = bgWidth + rectWidth / 2
-        }
+        // if (rectWidth < bgX) {
+        //     newX = rectWidth / -2
+        // } else if (rectX > bgX + bgWidth) {
+        //     newX = bgWidth + rectWidth / 2
+        // }
 
-        if (rectY + rectHeight < bgY) {
+        if (rectY < bgY / -2) {
             newY = rectHeight / -2
-        } else if (rectY > bgY + bgHeight) {
-            newY = bgHeight + rectHeight / 2
         }
+        // else if (rectY > bgY + bgHeight) {
+        //     newY = bgHeight + rectHeight / 2
+        // }
 
         targetNode.position({ x: newX, y: newY })
 
-        const stage = targetNode.getStage()
-        stage.batchDraw()
         setRect({
             x: newX, y: newY, width: rectWidth, height: rectHeight
         })
@@ -100,6 +95,7 @@ const Layers = ({ draggable, artworkContainer, artworkLayers, ratio }) => {
                     offsetY={rect.height / 2}
                     stroke={'red'}
                     strokeWidth={2}
+                // visible={false}
                 />}
 
                 <LayerBackground container={{ ...artworkContainer, x: 0, y: 0 }} />

@@ -4,7 +4,7 @@ import reduxConstant from '../constant'
 const createArtworkTemplates = createAction(`${reduxConstant.artworkDetail}/create-templates`)
 const reset = createAction(`${reduxConstant.artworkDetail}/reset`)
 const selectLayerIds = createAction(`${reduxConstant.artworkDetail}/select-layer-ids`)
-const editorContainer = createAction(`${reduxConstant.artworkDetail}/editor-container`)
+const changeStageRef = createAction(`${reduxConstant.artworkDetail}/change-stage-ref`)
 
 const initialState = {
     artworkLayers: [],
@@ -17,11 +17,7 @@ const initialState = {
         image: '',
     },
     selectLayerIds: [],
-    editorContainer: {
-        width: 0,
-        height: 0,
-        ref: null
-    }
+    stageRef: null
 }
 
 const artworkDetailReducer = createReducer(
@@ -39,13 +35,14 @@ const artworkDetailReducer = createReducer(
             .addCase(selectLayerIds, (state, { payload }) => {
                 state.selectLayerIds = payload
             })
-            .addCase(editorContainer, (state, { payload }) => {
-                state.editorContainer = { ...state.editorContainer, ...payload }
+            .addCase(changeStageRef, (state, { payload }) => {
+                console.log("🚀 ~ file: artworkDetail.reducer.js:39 ~ .addCase ~ payload:", payload)
+                // state.stageRef = payload
             })
     },
 )
 
 // Actions
-export const artworkDetailActions = { createArtworkTemplates, reset, selectLayerIds, editorContainer }
+export const artworkDetailActions = { createArtworkTemplates, reset, selectLayerIds, changeStageRef }
 export const artworkDetailSelector = state => state[reduxConstant.artworkDetail]
 export default artworkDetailReducer
